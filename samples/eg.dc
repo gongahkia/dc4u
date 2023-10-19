@@ -1,4 +1,5 @@
-//The general format is as follows//
+//📝 The general format for a .dc file is as follows//
+
 `TARGET FILE FORMAT`
 <SUSPECT NAME; NRIC; RACE; AGE; GENDER; NATIONALITY>
 [RECOMMENDED CHARGE TITLE; DATE OF OFFENCE; EXPLICATION OF CHARGE WITH RELATION TO MATERIAL FACTS]
@@ -6,13 +7,13 @@
 @CHARGING OFFICER; ROLE AND DIVISION (if applicable); DATE OF CHARGE@
 //COMMENT//
 
-//Comments will be ignored in the final formatted draft charge//
+//⚠️ Comments will be ignored in the final formatted draft charge.//
 
-//The below english-readable format works...//
+//📝 The below english-readable format works...//
 
 The suspect <S Shankar; S1234567A; Indian; 44; M; Singaporean> to be charged with [Negligence Act not amounting to culpable homicide; 19 August 2019; stored rojak sauce in refrigerator with raw seafood, causing the rojak sauce to become contaminated with Vibrio parahaemolyticus bacteria, which was then sold to Mr Lim Beng Kee, who consumed it and died of sepsis following a Vibrio parahaemolyticus infection at 10pm on 19 August 2019] //though the exact time of death is unconfirmed//, under {s304A(b) of Penal Code (Chapter 224, Rev Ed 2008)} by @SSgt Ghazali;IO, GIS 6, J Div;24 August 2020@, to be outputted as a `PDF` file. 
 
-//A barebones format also works for quick note taking...//
+//📝 A barebones format also works for quick note taking...//
 
 `PDF`
 <S Shankar; S1234567A; Indian; 44; M; Singaporean>
@@ -21,11 +22,11 @@ The suspect <S Shankar; S1234567A; Indian; 44; M; Singaporean> to be charged wit
 {s304A(b) of Penal Code (Chapter 224, Rev Ed 2008)}
 @SSgt Ghazali; IO, GIS 6, J Div; 24 August 2020@
 
-//It can also be condensed to one line...//
+//📝 It can also be condensed to one line...//
 
 `PDF`<S Shankar; S1234567A; Indian; 44; M; Singaporean>[Negligence Act not amounting to culpable homicide; 19 August 2019; stored rojak sauce in refrigerator with raw seafood, causing the rojak sauce to become contaminated with Vibrio parahaemolyticus bacteria, which was then sold to Mr Lim Beng Kee, who consumed it and died of sepsis following a Vibrio parahaemolyticus infection at 10pm on 19 August 2019]//though the exact time of death is unconfirmed//{s304A(b) of Penal Code (Chapter 224, Rev Ed 2008)}@SSgt Ghazali; IO, GIS 6, J Div; 24 August 2020@
 
-//The order of elements also does not matter, only the syntax does, so the below (and any permutation of the below) is also valid...//
+//📝 The order of elements also does not matter, only the syntax does, so the below (and any permutation of the below) is also valid...//
 
 @SSgt Ghazali; IO, GIS 6, J Div; 24 August 2020@
 <S Shankar; S1234567A; Indian; 44; M; Singaporean>
@@ -33,3 +34,13 @@ The suspect <S Shankar; S1234567A; Indian; 44; M; Singaporean> to be charged wit
 //though the exact time of death is unconfirmed//
 [Negligence Act not amounting to culpable homicide; 19 August 2019; stored rojak sauce in refrigerator with raw seafood, causing the rojak sauce to become contaminated with Vibrio parahaemolyticus bacteria, which was then sold to Mr Lim Beng Kee, who consumed it and died of sepsis following a Vibrio parahaemolyticus infection at 10pm on 19 August 2019]
 `PDF`
+
+//📝 To include more than one draft charge in a single .dc file, simply include the seperator ---//
+
+DRAFT CHARGE 1...
+---
+DRAFT CHARG 2...
+---
+DRAFT CHARGE 3...
+---
+etc.
