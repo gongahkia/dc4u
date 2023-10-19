@@ -1,5 +1,3 @@
-> FUA: Implement syntax in `lexer.py`
-
 # Draft Charges 4 U
 
 A Legal Draft Charge Creator.

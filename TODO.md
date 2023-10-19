@@ -1,7 +1,7 @@
 # To do
 
 - [ ] `lexer.py`
-    - [ ] add relevant syntax for `.dc`
+    - [ ] implement relevant syntax for `.dc`
     - [ ] implement splitting of the draft charges with `---` at an early stage in this file(?)
 - [ ] `interpreter.py`
     - [ ] implement error messages and language syntax checking
