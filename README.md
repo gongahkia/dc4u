@@ -21,9 +21,17 @@ This format is intended to allow for quick integration with existing workflows w
 
 ## Language syntax
 
-| **stylisation** | **syntax** | **implementation status** |
-| :---: | :---: | :---: |
-| | | |
+Refer to `samples/eg.dc` for examples and expansion on `.dc` syntax.
+
+| **stylisation** | **syntax** | **notes** | **implementation status** |
+| :---: | :---: | :---: | :---: |
+| output format | \` ` | PDF, HTML, TXT, MD, DOC | 😔 |
+| Suspect name; NRIC; Race; Age; Gender; Nationality | < > | | 😔 |
+| Recommended charge title; Date of offence; Explication of charge | [ ] | | 😔 |
+| Relevant statute | { } | | 😔 |
+| Charging officer; Role and Division; Date of charge | @ @ | | 😔 |
+| Comments | // // | Comments are ignored in the final formatted draft charge | 😔 |
+| Separator | --- | | 😔 |
 
 ## Purpose
 
