@@ -1,5 +1,7 @@
 # FUA: 
-# - refactor and rework line 30 to accomodate different output formats
+    # - refactor and add a split() based on --- to detect the relevant split draft charges
+    # - refactor and rework line 30 to accomodate different output formats
+    # - make event loop clearer if necessary
 
 import lexer as lx
 import interpreter as inter

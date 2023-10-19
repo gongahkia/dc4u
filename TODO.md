@@ -1,15 +1,5 @@
 # To do
 
-- [ ] `lexer.py`
-    - [ ] implement relevant syntax for `.dc`
-    - [ ] implement splitting of the draft charges with `---` at an early stage in this file(?)
-- [ ] `interpreter.py`
-    - [ ] implement error messages and language syntax checking
-    - [ ] ensure output format is correct
-    - [ ] test and retest to ensure that there are no issues with the interpreter accepting invalid input
-- [ ] `main.py`
-    - [ ] split input accordingly
-    - [ ] ensure no issues with event loop
 - [ ] Implement syntax to split multiple draft charges on --- such that multipe draft charges can be created from one `.dc` file
 - [ ] Implement bash scripting to... 
     - [ ] handle installation 
