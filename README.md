@@ -2,7 +2,7 @@
 
 # Draft Charges 4 U
 
-A Draft Charge Creator.
+A Legal Draft Charge Creator.
 
 ## Motivation
 
