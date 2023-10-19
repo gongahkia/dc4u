@@ -1,5 +1,6 @@
 # To do
 
+- [ ] Create a sample `.dc` file that I can use to test `lexer.py` and `interpreter.py`
 - [ ] Implement syntax to split multiple draft charges on --- such that multipe draft charges can be created from one `.dc` file
 - [ ] Implement bash scripting to... 
     - [ ] handle installation 
