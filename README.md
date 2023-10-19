@@ -8,6 +8,8 @@ A Legal Draft Charge Creator.
 
 [Draft charges](https://mustsharenews.com/wp-content/uploads/2018/12/TOC-Charge-Sheet.jpg) are inane to format. This simplifies the entire process of creating Draft Charges, by transpiling a human-readable markup format (`.dc`) to different targets for viewing and distribution.
 
+This format is intended to allow for quick integration with existing workflows when taking down material facts.
+
 ## Features
 
 * Takes in a simple reworked markdown format, implement LEXER and PARSER that transpiles to multiple targets
