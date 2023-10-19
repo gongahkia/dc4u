@@ -5,9 +5,8 @@ import re
 # defines the grammer rules for the markup language
  # order of patterns matters since they're checked from top to bottom. Place more specific patterns before generic ones.
 
-# FUA: add relevant syntax for dc --> allow for output format to be specified at top of .dc file 
-
 grammer_pattern:list = [
+    ('OUTPUT_FORMAT', r'')
     ('ITAL', r'\`'),
     ('BOLD', r'\*'),
     ('UNDER', r'\_'),

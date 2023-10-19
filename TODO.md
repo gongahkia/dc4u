@@ -6,6 +6,7 @@
 - [ ] `interpreter.py`
     - [ ] implement error messages and language syntax checking
     - [ ] ensure output format is correct
+    - [ ] test and retest to ensure that there are no issues with the interpreter accepting invalid input
 - [ ] `main.py`
     - [ ] split input accordingly
     - [ ] ensure no issues with event loop
