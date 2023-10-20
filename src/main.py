@@ -36,7 +36,11 @@ def main():
 # ---
 
 debug_print_original()
-inter.parser_interpreter(main())
+dc_array:list[tuple] | None = inter.parser_interpreter(main()) # expressing the possible enums
+if dc_array is not None:
+    for dc in dc_array:
+        dc_file_name:str = dc[0] 
+        dc_contents:str = dc[1]
 
 """parsed_tuple_output:tuple = inter.parser_interpreter(main())
 file_name, output_src = parsed_tuple_output[0], parsed_tuple_output[1]
