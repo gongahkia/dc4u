@@ -2,6 +2,7 @@
 
 - [x] Create a sample `.dc` file that I can use to test `lexer.py` and `interpreter.py`
 - [x] Implement syntax to split multiple draft charges on --- such that multipe draft charges can be created from one `.dc` file
+- [ ] Implement a Python [Curses CLI interface](https://docs.python.org/3/howto/curses.html) to make this app even better to use
 - [ ] Implement bash scripting to... 
     - [ ] handle installation 
     - [ ] run the `.dc` transpiler in the CLI

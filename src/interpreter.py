@@ -130,7 +130,8 @@ def parser_interpreter(overall_token_array:list[tuple]):
 
         # checking for vital required information for each draft charge 
 
-        # last check before returning --> for output format of each draft charge 
+        # DONE ✅ 
+        # last check before returning the values --> for output format of each draft charge 
         if "OUTPUT_FORMAT" not in vital_information_dict:
             print(f"Syntax error detected in Draft Charge {draft_charge_count}! Output format not provided. Please provide one.")
             return None
