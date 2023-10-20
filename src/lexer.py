@@ -1,21 +1,19 @@
 # handles lexical analysis of dc files
 
-# FUA 
-    # --- separator is implemented elsewhere in main.py FOR NOW
-    # are newlines really relevant? otherwise remove the newline token entirely
-
 import re 
 
 # defines the grammer rules for the markup language
 # order of patterns matters since they're checked from top to bottom. Place more specific patterns before generic ones.
 grammer_pattern:list = [
     ('OUTPUT_FORMAT', r'\`'),
-    ('SUSPECT_INFO', r'\<'),
-    ('CHARGE_INFO', r'\['),
-    ('STATUTE_INFO', r'\{'),
+    ('L_SUSPECT_INFO', r'\<'),
+    ('R_SUSPECT_INFO', r'\>'),
+    ('L_CHARGE_INFO', r'\['),
+    ('R_CHARGE_INFO', r'\]'),
+    ('L_STATUTE_INFO', r'\{'),
+    ('R_STATUTE_INFO', r'\}'),
     ('CHARGING_OFFICER_INFO', r'\@'),
     ('COMMENT', r'\#'),
-    ('NEWLINE', r'\^\^'),
     ('WORD', r'[A-Za-z0-9;,.?$!%-+*_()]+'),
         ]
 
