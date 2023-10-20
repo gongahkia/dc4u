@@ -6,8 +6,16 @@
     # - implement error messages and language syntax checking
     # - test, test and retest to ensure that there are no issues with the interpreter accepting invalid input
 
-def parser_interpreter(input_tuple:tuple, output_format:str):
-    # print(token_array)
-    for i in range((len(token_array)):
+def parser_interpreter(input_tuple:tuple):
+    print(input_tuple[1])
+    """for i in range((len(token_array)):
         match token_array[i]["type"]:
-            case "":
+
+            # DONE ✅
+            case "NEWLINE":
+                final_string += "\n"
+                line_counter += 1
+
+            # DONE ✅
+            case _:
+                print("edge case detected") # error logging"""
