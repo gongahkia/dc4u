@@ -25,7 +25,7 @@ Refer to `samples/eg.dc` for examples and expansion on `.dc` syntax.
 
 | **stylisation** | **syntax** | **notes** | **implementation status** |
 | :---: | :---: | :---: | :---: |
-| output format | \` ` | PDF, HTML, TXT, MD, DOC | 😔 |
+| output format | \` ` | PDF, HTML, TXT, MD, DOC | 👍 |
 | Suspect name; NRIC; Race; Age; Gender; Nationality | < > | | 😔 |
 | Recommended charge title; Date of offence; Explication of charge | [ ] | | 😔 |
 | Relevant statute | { } | | 😔 |
