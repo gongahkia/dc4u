@@ -2,13 +2,13 @@
 
 # FUA:
     # - debug accordingly
-    # - use a match case statement for language syntax of output format
-    # - use a match case statement for each item type in the token_array and adding to the final string
+    # - use a match case statement for language syntax of output format --> fill this in for EACH TOKEN last!
     # - implement error messages and language syntax checking
     # - test, test and retest to ensure that there are no issues with the interpreter accepting invalid input
     # - work on respective outputs for each token
     # - comments to be ignored
     # - the format of each other match case statement aside from splitting by ; and accounting for invalid matching syntax and invalid number of arguments --> then run another individual match case statement for the output format
+    # - is there any real distinction between commented text and text with no comments? since both are technically ignored?
 
 def parser_interpreter(overall_token_array:list[tuple]):
 
@@ -16,7 +16,9 @@ def parser_interpreter(overall_token_array:list[tuple]):
     final_draft_charge_array:list[tuple] = []
 
     for token_array in overall_token_array:
-        print(token_array)
+
+        # print(token_array[1])
+
         draft_charge_count += 1
 
         # each of these is written to for each output, allowing output format to be specified in the end
@@ -30,6 +32,7 @@ def parser_interpreter(overall_token_array:list[tuple]):
         match_stack:list[str]= [] # used to determine active stack of unmatched symbols
 
         for i in range(len(token_array[1])):
+
             print(token_array[1][i])
 
             match token_array[1][i]["type"]:
@@ -114,7 +117,25 @@ def parser_interpreter(overall_token_array:list[tuple]):
 
 # --------------------
 
+                # DONE ✅ 
                 case "COMMENT":
+
+                    if "COMMENT" not in match_stack: # opening comment character 
+                        match_stack.append("COMMENT")     
+                        # print([list(token.values())[0] for token in token_array[1][i+1:]])
+                        if "COMMENT" not in [list(token.values())[0] for token in token_array[1][i+1:]]:
+                            print(f"Syntax error detected in Draft Charge {draft_charge_count}! Unmatched comment character (#) found.")
+                            return None
+
+                        else:
+                            pass
+
+                    elif "COMMENT" in match_stack: # closing comment character
+                        match_stack.remove("COMMENT")
+
+                    else:
+                        print("Error code 0004. Drop me a message on Github @gongahkia.")
+                        return None
                     pass
 
 # --------------------
