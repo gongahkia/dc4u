@@ -34,6 +34,8 @@ def parser_interpreter(overall_token_array:list[tuple]):
 
             match token_array[1][i]["type"]:
                 
+# --------------------
+
                 # DONE ✅ 
                 # - should only occur once
                 case "OUTPUT_FORMAT":
@@ -75,36 +77,56 @@ def parser_interpreter(overall_token_array:list[tuple]):
                             print("Error Code 0001. Drop me a message on Github @gongahkia.")
                             return None
 
+# --------------------
+
                 case "L_SUSPECT_INFO":
                     pass
+
+# --------------------
 
                 case "R_SUSPECT_INFO":
                     pass
 
+# --------------------
+
                 case "L_CHARGE_INFO":
                     pass
+
+# --------------------
 
                 case "R_CHARGE_INFO":
                     pass
 
+# --------------------
+
                 case "L_STATUTE_INFO":
                     pass
                     
+# --------------------
+
                 case "R_STATUTE_INFO":
                     pass
+
+# --------------------
 
                 case "CHARGING_OFFICER_INFO":
                     pass
 
+# --------------------
+
                 case "COMMENT":
                     pass
+
+# --------------------
 
                 case "WORD":
                     pass
 
-                # DONE
+# --------------------
+
+                # DONE ✅ 
                 case _:
-                    print("edge case detected") # error logging"""
+                    print("Error Code 0003. Drop me a message on @gongahkia.")
 
         # checking for vital required information for each draft charge 
 
