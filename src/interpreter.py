@@ -8,7 +8,7 @@
     # - test, test and retest to ensure that there are no issues with the interpreter accepting invalid input
     # - work on respective outputs for each token
     # - comments to be ignored
-    # - the format of each other match case statement aside from splitting by ; and accounting for invalid matching syntax, then run another individual match case statment for the output format
+    # - the format of each other match case statement aside from splitting by ; and accounting for invalid matching syntax and invalid number of arguments --> then run another individual match case statement for the output format
 
 def parser_interpreter(overall_token_array:list[tuple]):
 
