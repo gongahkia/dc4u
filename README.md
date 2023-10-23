@@ -1,4 +1,4 @@
-> ❗ ***This is a WIP***
+![Static Badge](https://img.shields.io/badge/build_1.0-passing-green)
 
 # Draft Charges 4 U
 
