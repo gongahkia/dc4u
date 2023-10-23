@@ -3,8 +3,7 @@
 # FUA:
 
     # BE AWARE FUA!!!
-        # - with all values from vital_information_dict, create each file's relevant syntax (abstracted into functions) at the bottom of the parser_interpeter function
-        # - do i want to implement checks for string values in vital_information_dict at the bottom? if yes for certain values, implement at bottom of the parser_interpeter function AFTER checking whether the key has any relevant value at all --> perhaps for date values such as for CHARGING_DATE and OFFENSE_DATE?
+        # - with all values from vital_information_dict, create each file's relevant syntax (abstracted into functions) at the bottom of the parser_interpeter function in line 393
 
     # DEBUG GENERAL
         # - implement error messages and language syntax checking
