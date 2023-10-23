@@ -10,9 +10,9 @@ grammer_pattern:list = [
     ('R_SUSPECT_INFO', r'\>'),
     ('L_CHARGE_INFO', r'\['),
     ('R_CHARGE_INFO', r'\]'),
-    ('L_STATUTE_INFO', r'\{'),
-    ('R_STATUTE_INFO', r'\}'),
-    ('CHARGING_OFFICER_INFO', r'\@'),
+    ('STATUTE_INFO', r'\@'),
+    ('L_CHARGING_OFFICER_INFO', r'\{'),
+    ('R_CHARGING_OFFICER_INFO', r'\}'),
     ('COMMENT', r'\#'),
     ('WORD', r'[A-Za-z0-9;,.?$!%-+*_()]+'),
         ]

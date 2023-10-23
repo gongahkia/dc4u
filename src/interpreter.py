@@ -3,9 +3,8 @@
 # FUA:
 
     # BE AWARE FUA!!!
-        # - implement logic for charge, statute and charging officer
         # - with all values from vital_information_dict, create each file's relevant syntax (abstracted into functions) at the bottom of the parser_interpeter function
-        # - do i want to implement checks for string values in vital_information_dict at the bottom? if yes for certain values, implement at bottom of the parser_interpeter function AFTER checking whether the key has any relevant value at all --> perhaps for date?
+        # - do i want to implement checks for string values in vital_information_dict at the bottom? if yes for certain values, implement at bottom of the parser_interpeter function AFTER checking whether the key has any relevant value at all --> perhaps for date values such as for CHARGING_DATE and OFFENSE_DATE?
 
     # DEBUG GENERAL
         # - implement error messages and language syntax checking
@@ -53,6 +52,9 @@ def parser_interpreter(overall_token_array:list[tuple]):
                                     } # used to record important information
         match_stack:list[str]= [] # used to determine active stack of unmatched symbols
         suspect_info:str = ""
+        charge_info:str = ""
+        statute_info:str = ""
+        charging_officer_info:str = ""
 
         for i in range(len(token_array[1])):
 
@@ -93,7 +95,7 @@ def parser_interpreter(overall_token_array:list[tuple]):
                             if token_array[1][i+2]["type"] == "OUTPUT_FORMAT":
                                 pass
                             else:
-                                print(f"Syntax error detected in Draft Charge {draft_charge_count}. Unmatched output format characters (`) found.")
+                                print(f"Syntax error detected in Draft Charge {draft_charge_count}. Unmatched output format characters '`' found.")
                                 return None
                         
                         elif "OUTPUT_FORMAT" in match_stack:
@@ -105,20 +107,24 @@ def parser_interpreter(overall_token_array:list[tuple]):
 
 # --------------------
 
-# FUA: add edge case checking for any issues with syntax, and if info is not provided at all --> add the latter check below
                 # DONE ✅ 
                 case "L_SUSPECT_INFO":
-
-                    if "R_SUSPECT_INFO" not in [list(token.values())[0] for token in token_array[1][i+1:]]:
-                        print(f"Syntax error detected in Draft Charge {draft_charge_count}. Unmatched suspect infromation character (<) found.")
+                    if vital_information_dict["SUSPECT_NAME"] != "" and vital_information_dict["SUSPECT_AGE"] != 0 and vital_information_dict["SUSPECT_RACE"] != "" and vital_information_dict["SUSPECT_GENDER"] != "" and vital_information_dict["SUSPECT_NRIC"] != "" and vital_information_dict["SUSPECT_NATIONALITY"] != "" and suspect_info != "": 
+                        print(f"Syntax error detected in Draft Charge {draft_charge_count}. Multiple instances of suspect information provided. Please provide one only.")
                         return None
-
-                    elif "R_SUSPECT_INFO" in [list(token.values())[0] for token in token_array[1][i+1:]]:
-                        match_stack.append("L_SUSPECT_INFO")
 
                     else:
-                        print("Error code 0005. Drop me a message on Github @gongahkia.")
-                        return None
+
+                        if "R_SUSPECT_INFO" not in [list(token.values())[0] for token in token_array[1][i+1:]]:
+                            print(f"Syntax error detected in Draft Charge {draft_charge_count}. Unmatched suspect infromation character `<` found.")
+                            return None
+
+                        elif "R_SUSPECT_INFO" in [list(token.values())[0] for token in token_array[1][i+1:]]:
+                            match_stack.append("L_SUSPECT_INFO")
+
+                        else:
+                            print("Error Code 0005. Drop me a message on Github @gongahkia.")
+                            return None
 
 # --------------------
 
@@ -126,7 +132,7 @@ def parser_interpreter(overall_token_array:list[tuple]):
                 case "R_SUSPECT_INFO":
 
                     if "L_SUSPECT_INFO" not in [list(token.values())[0] for token in token_array[1][:i+1]]:
-                        print(f"Syntax error detected in Draft Charge {draft_charge_count}. Unmatched suspect infromation character (>) found.")
+                        print(f"Syntax error detected in Draft Charge {draft_charge_count}. Unmatched suspect information character `>` found.")
                         return None
 
                     elif "L_SUSPECT_INFO" in [list(token.values())[0] for token in token_array[1][:i+1]] and "L_SUSPECT_INFO" in match_stack:
@@ -151,33 +157,133 @@ def parser_interpreter(overall_token_array:list[tuple]):
                         vital_information_dict["SUSPECT_NATIONALITY"] = suspect_info.split(";")[5]
 
                     else:
-                        print("Error code 0006. Drop me a message on Github @gongahkia.")
+                        print("Error Code 0011. Drop me a message on Github @gongahkia.")
                         return None
 
 # --------------------
 
+                # DONE ✅ 
                 case "L_CHARGE_INFO":
-                    pass
+                    if vital_information_dict["CHARGE_TITLE"] != "" and vital_information_dict["CHARGE_EXPLANATION"] != "" and vital_information_dict["OFFENSE_DATE"] != "" and charge_info != "":
+                        print(f"Syntax error detected in Draft Charge {draft_charge_count}. Multiple instances of charge information provided. Please provide one only.")
+                        return None
+
+                    else:
+                        if "R_CHARGE_INFO" not in [list(token.values())[0] for token in token_array[1][i+1:]]:
+                            print(f"Syntax error detected in Draft Charge {draft_charge_count}. Unmatched charge information character `[` found.")
+                            return None
+
+                        elif "R_CHARGE_INFO" in [list(token.values())[0] for token in token_array[1][i+1:]]:
+                            match_stack.append("L_CHARGE_INFO")
+
+                        else:
+                            print("Error Code 0007. Drop me a message on Github @gongahkia.")
+                            return None
 
 # --------------------
 
+                # DONE ✅ 
                 case "R_CHARGE_INFO":
-                    pass
+
+                    if "L_CHARGE_INFO" not in [list(token.values())[0] for token in token_array[1][:i+1]]:
+                        print(f"Syntax error detected in Draft Charge {draft_charge_count}. Unmatched charge information character `]` found.")
+                        return None
+
+                    elif "L_CHARGE_INFO" in [list(token.values())[0] for token in token_array[1][:i+1]] and "L_CHARGE_INFO" in match_stack:
+                        match_stack.remove("L_CHARGE_INFO")
+                        # print(charge_info)
+                        
+                        if len(charge_info.split(";")) != 3:
+                            print(f"Incomplete information detected in Draft Charge {draft_charge_count}. Wrong number of arguments provided for charge information. Please provide 3, seperated by semicolons (;).")
+                            return None
+
+                        vital_information_dict["CHARGE_TITLE"] = charge_info.split(";")[0]
+                        vital_information_dict["OFFENSE_DATE"] = charge_info.split(";")[1]
+                        vital_information_dict["CHARGE_EXPLANATION"] = charge_info.split(";")[2]
+
+                    else:
+                        print("Error Code 0006. Drop me a message on Github @gongahkia.")
+                        return None
 
 # --------------------
 
-                case "L_STATUTE_INFO":
-                    pass
-                    
+                # DONE ✅ 
+                case "STATUTE_INFO":
+
+                    if vital_information_dict["STATUTE"] != "" and "STATUTE_INFO" not in match_stack:
+                        print(f"Syntax error detected in Draft Charge {draft_charge_count}. Multiple statutes provided. Please provide one only.")
+                        return None
+
+                    else:
+                        if "STATUTE_INFO" not in match_stack: # opening statute info character 
+                            match_stack.append("STATUTE_INFO")     
+                            # print([list(token.values())[0] for token in token_array[1][i+1:]])
+                            if "STATUTE_INFO" not in [list(token.values())[0] for token in token_array[1][i+1:]]:
+                                print(f"Syntax error detected in Draft Charge {draft_charge_count}. Unmatched statute information character '@' found.")
+                                return None
+
+                            else:
+                                pass
+
+                        elif "STATUTE_INFO" in match_stack: # closing statute info character
+                            match_stack.remove("STATUTE_INFO")
+                            # print(statute_info)
+                            if len(statute_info) < 1:
+                                print(f"Syntax error detected in Draft Charge {draft_charge_count}. No arguments were provided between the statute information characters '@'.")
+                                return None
+                            else:
+                                vital_information_dict["STATUTE"] = statute_info
+
+                        else:
+                            print("Error Code 0010. Drop me a message on Github @gongahkia.")
+                            return None
+
 # --------------------
 
-                case "R_STATUTE_INFO":
-                    pass
+                # DONE ✅ 
+                case "L_CHARGING_OFFICER_INFO":
+                    if vital_information_dict["CHARGING_OFFICER"] != "" and vital_information_dict["CHARGING_DATE"] != "" and vital_information_dict["ROLE_DIV"] != "" and charging_officer_info != "":
+                        print(f"Syntax error detected in Draft Charge {draft_charge_count}. Multiple instances of charging officer information provided. Please provide one only.")
+                        return None
+
+                    else:
+                        if "R_CHARGING_OFFICER_INFO" not in [list(token.values())[0] for token in token_array[1][i+1:]]:
+                            print(f"Syntax error detected in Draft Charge {draft_charge_count}.", end="")
+                            print("Unmatched charging officer information character '{' found.")
+                            return None
+
+                        elif "R_CHARGING_OFFICER_INFO" in [list(token.values())[0] for token in token_array[1][i+1:]]:
+                            match_stack.append("L_CHARGING_OFFICER_INFO")
+
+                        else:
+                            print("Error Code 0008. Drop me a message on Github @gongahkia.")
+                            return None
 
 # --------------------
 
-                case "CHARGING_OFFICER_INFO":
-                    pass
+                # DONE ✅ 
+                case "R_CHARGING_OFFICER_INFO":
+
+                    if "R_CHARGING_OFFICER_INFO" not in [list(token.values())[0] for token in token_array[1][:i+1]]:
+                        print(f"Syntax error detected in Draft Charge {draft_charge_count}.", end="")
+                        print("Unmatched charging officer information character `}` found.")
+                        return None
+
+                    elif "L_CHARGING_OFFICER_INFO" in [list(token.values())[0] for token in token_array[1][:i+1]] and "L_CHARGING_OFFICER_INFO" in match_stack:
+                        match_stack.remove("L_CHARGING_OFFICER_INFO")
+                        # print(charging_officer_info)
+                        
+                        if len(charging_officer_info.split(";")) != 3:
+                            print(f"Incomplete information detected in Draft Charge {draft_charge_count}. Wrong number of arguments provided for charging officer information. Please provide 3, seperated by semicolons (;).")
+                            return None
+
+                        vital_information_dict["CHARGING_OFFICER"] = charging_officer_info.split(";")[0]
+                        vital_information_dict["ROLE_DIV"] = charging_officer_info.split(";")[1]
+                        vital_information_dict["CHARGING_DATE"] = charging_officer_info.split(";")[2]
+
+                    else:
+                        print("Error Code 0009. Drop me a message on Github @gongahkia.")
+                        return None
 
 # --------------------
 
@@ -188,7 +294,7 @@ def parser_interpreter(overall_token_array:list[tuple]):
                         match_stack.append("COMMENT")     
                         # print([list(token.values())[0] for token in token_array[1][i+1:]])
                         if "COMMENT" not in [list(token.values())[0] for token in token_array[1][i+1:]]:
-                            print(f"Syntax error detected in Draft Charge {draft_charge_count}. Unmatched comment character (#) found.")
+                            print(f"Syntax error detected in Draft Charge {draft_charge_count}. Unmatched comment character '#' found.")
                             return None
 
                         else:
@@ -198,7 +304,7 @@ def parser_interpreter(overall_token_array:list[tuple]):
                         match_stack.remove("COMMENT")
 
                     else:
-                        print("Error code 0004. Drop me a message on Github @gongahkia.")
+                        print("Error Code 0004. Drop me a message on Github @gongahkia.")
                         return None
                     pass
 
@@ -207,6 +313,12 @@ def parser_interpreter(overall_token_array:list[tuple]):
                 case "WORD":
                     if "L_SUSPECT_INFO" in match_stack:
                         suspect_info += token_array[1][i]["value"]
+                    elif "L_CHARGE_INFO" in match_stack:
+                        charge_info += token_array[1][i]["value"]
+                    elif "STATUTE_INFO" in match_stack:
+                        statute_info += token_array[1][i]["value"]
+                    elif "L_CHARGING_OFFICER_INFO" in match_stack:
+                        charging_officer_info += token_array[1][i]["value"]
                     # elif blah blah
                         # add code here
                     pass

@@ -28,8 +28,8 @@ Refer to `samples/eg.dc` for examples and expansion on `.dc` syntax.
 | output format | \` ` | PDF, HTML, TXT, MD, DOC | 👍 |
 | Suspect name; NRIC; Race; Age; Gender; Nationality | < > | | 😔 |
 | Recommended charge title; Date of offence; Explication of charge | [ ] | | 😔 |
-| Relevant statute | { } | | 😔 |
-| Charging officer; Role and Division; Date of charge | @ @ | | 😔 |
+| Relevant statute | @ @ | | 😔 |
+| Charging officer; Role and Division; Date of charge | { } | | 😔 |
 | Comments | # # | Comments are ignored in the final formatted draft charge | 👍 |
 | Separator | --- | | 😔 |
 
