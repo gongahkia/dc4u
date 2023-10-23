@@ -14,7 +14,7 @@ grammer_pattern:list = [
     ('L_CHARGING_OFFICER_INFO', r'\{'),
     ('R_CHARGING_OFFICER_INFO', r'\}'),
     ('COMMENT', r'\#'),
-    ('WORD', r'[A-Za-z0-9;,.?$!%-+*_()]+'),
+    ('WORD', r'[A-Za-z0-9;,.?$!%-+*_/()]+'),
         ]
 
 # create the token array, which contains dictionaries of the data type and value of each token

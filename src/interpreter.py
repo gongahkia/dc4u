@@ -198,9 +198,12 @@ def parser_interpreter(overall_token_array:list[tuple]):
                             return None
 
                         vital_information_dict["CHARGE_TITLE"] = charge_info.split(";")[0]
-                        vital_information_dict["OFFENSE_DATE"] = charge_info.split(";")[1]
                         vital_information_dict["CHARGE_EXPLANATION"] = charge_info.split(";")[2]
 
+                        if not check_date_format(charge_info.split(";")[1]):
+                            return None
+                        else:
+                            vital_information_dict["OFFENSE_DATE"] = create_date(charge_info.split(";")[1])
                     else:
                         print("Error Code 0006. Drop me a message on Github @gongahkia.")
                         return None
@@ -279,7 +282,11 @@ def parser_interpreter(overall_token_array:list[tuple]):
 
                         vital_information_dict["CHARGING_OFFICER"] = charging_officer_info.split(";")[0]
                         vital_information_dict["ROLE_DIV"] = charging_officer_info.split(";")[1]
-                        vital_information_dict["CHARGING_DATE"] = charging_officer_info.split(";")[2]
+
+                        if not check_date_format(charging_officer_info.split(";")[2]):
+                            return None 
+                        else:
+                            vital_information_dict["CHARGING_DATE"] = create_date(charging_officer_info.split(";")[2])
 
                     else:
                         print("Error Code 0009. Drop me a message on Github @gongahkia.")
@@ -417,3 +424,51 @@ def parser_interpreter(overall_token_array:list[tuple]):
 # --------------------
 
     return final_draft_charge_array
+
+# --------------------
+
+# DONE ✅ 
+def check_date_format(date:str) -> bool | None :
+    try:
+        day, month, year = map(int, date.split("/"))
+        if day < 1 or day > 31 or month < 1 or month > 12 or year < 1:
+            print(f"Syntax error detected in the date provided: {date}. Please adhere to the specified format of DD/MM/YYYY")
+            return False
+        else:
+            return True
+    except (ValueError, IndexError):
+        print(f"Syntax error detected in the date provided: {date}. Please adhere to the specified format of DD/MM/YYYY and use integers for all values.")
+        return False
+
+# DONE ✅ 
+def create_date(date:str) -> str | None:
+    day:str= date.split("/")[0]
+    year:str = date.split("/")[2]
+    match int(date.split("/")[1]):
+        case 1:
+            month:str = "January"
+        case 2:
+            month:str = "February"
+        case 3:
+            month:str = "March"
+        case 4:
+            month:str = "April"
+        case 5:
+            month:str = "May"
+        case 6:
+            month:str = "June"
+        case 7:
+            month:str = "July"
+        case 8:
+            month:str = "August"
+        case 9:
+            month:str = "September"
+        case 10:
+            month:str = "October"
+        case 11:
+            month:str = "November"
+        case 12:
+            month:str = "December"
+        case _:
+            return None
+    return f"{day} {month} {year}"
