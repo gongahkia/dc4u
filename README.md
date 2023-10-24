@@ -15,10 +15,10 @@ This format is intended to allow for quick integration with existing workflows w
 * Speed up process of formatting draft charges
 * Small source code binary and compilation target, faster compilation times
 * Simplify inane legal admin work for lawyers
+* `DC4U` transpiler takes in a simple reworked markup format and transpiles to multiple targets
+* Afraid you won't remember `.dc` language syntax? The `DC4U` transpiler will *kindly* point out the error and correct you accordingly.
 
-## Features
-
-* The `DC4U` transpiler takes in a simple reworked markup format and transpiles to multiple targets.
+## Output formats
 
 | Output format | Purpose | Implementation status |
 | :---: | :---: | :---: |
@@ -29,7 +29,7 @@ This format is intended to allow for quick integration with existing workflows w
 | `.html` | Rudimentary API implementation | ![](https://img.shields.io/badge/build-down-red) |
 | `.docx` | Microsoft clowns and google doc integration | ![](https://img.shields.io/badge/build-down-red)|
 
-> Further Output formats implemented later
+> Further Output formats implemented later. 
 
 ## Language syntax
 
@@ -45,10 +45,14 @@ Refer to `samples/eg.dc` for examples and expansion on `.dc` syntax.
 | Comments | # # | Comments are ignored in the final formatted draft charge | ![](https://img.shields.io/badge/build-up-darkgreen)  |
 | Separator | --- | | ![](https://img.shields.io/badge/build-up-darkgreen)  |
 
+# Screenshots
+
 # Installation
 
 ```console
 $ git clone https://github.com/gongahkia/dc4u
+# add further instructions here 
 ```
 
 # Troubleshooting
+
