@@ -22,8 +22,8 @@ This format is intended to allow for quick integration with existing workflows w
 
 | Output format | Purpose | Implementation status |
 | :---: | :---: | :---: |
-| `.txt` | Universal viewing | ![](https://img.shields.io/badge/build-in_progress-orange) |
-| `.md` | Formatted viewing | ![](https://img.shields.io/badge/build-down-red)|
+| `.txt` | Universal viewing | ![](https://img.shields.io/badge/build-up-darkgreen) |
+| `.md` | Formatted viewing | ![](https://img.shields.io/badge/build-in_progress-orange)|
 | `.rmd` | Rudimentary integration of calculation and data vis | ![](https://img.shields.io/badge/build-down-red)
 | `.pdf` | Widely accepted format for sharing and viewing | ![](https://img.shields.io/badge/build-down-red) |
 | `.html` | Rudimentary API implementation | ![](https://img.shields.io/badge/build-down-red) |

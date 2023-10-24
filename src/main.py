@@ -1,7 +1,8 @@
 # FUA: 
-    # - refactor and add a split() based on --- to detect the relevant split draft charges
-    # - refactor and rework line 30 to accomodate different output formats
+    # - read each value in the returned list, and write the content to the respective filename of argument index [0]
     # - make event loop clearer if necessary
+    # - refactor and rework line 30 to accomodate different output formats
+    # - refactor and add a split() based on --- to detect the relevant split draft charges
 
 import lexer as lx
 import interpreter as inter

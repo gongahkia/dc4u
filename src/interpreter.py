@@ -3,7 +3,7 @@
 # FUA:
 
     # BE AWARE FUA!!!
-        # - with all values from vital_information_dict, create each file's relevant syntax (abstracted into functions) at the bottom of the parser_interpeter function in line 393
+        # - with all values from vital_information_dict, create each file's relevant syntax (abstracted into functions) at the bottom of the parser_interpeter function in line 474
 
     # DEBUG GENERAL
         # - implement error messages and language syntax checking
@@ -12,7 +12,7 @@
 
 # --------------------
 
-def parser_interpreter(overall_token_array:list[tuple]):
+def parser_interpreter(overall_token_array:list[tuple]) -> (list[tuple]) | None:
 
     draft_charge_count:int = 0
     final_draft_charge_array:list[tuple] = []
@@ -53,7 +53,7 @@ def parser_interpreter(overall_token_array:list[tuple]):
 
         for i in range(len(token_array[1])):
 
-            print(token_array[1][i])
+            # print(token_array[1][i])
 
             match token_array[1][i]["type"]:
                 
@@ -314,13 +314,13 @@ def parser_interpreter(overall_token_array:list[tuple]):
 
                 case "WORD":
                     if "L_SUSPECT_INFO" in match_stack:
-                        suspect_info += token_array[1][i]["value"]
+                        suspect_info += token_array[1][i]["value"] + " "
                     elif "L_CHARGE_INFO" in match_stack:
-                        charge_info += token_array[1][i]["value"]
+                        charge_info += token_array[1][i]["value"] + " "
                     elif "STATUTE_INFO" in match_stack:
-                        statute_info += token_array[1][i]["value"]
+                        statute_info += token_array[1][i]["value"] + " "
                     elif "L_CHARGING_OFFICER_INFO" in match_stack:
-                        charging_officer_info += token_array[1][i]["value"]
+                        charging_officer_info += token_array[1][i]["value"] + " "
                     # elif blah blah
                         # add code here
                     pass
@@ -386,29 +386,25 @@ def parser_interpreter(overall_token_array:list[tuple]):
 
 # --------------------
 
-        # ~!FUA!~
-            # - add functions here for each file format, to create the relevant file content for each file format from the vital_information_dict data structure
-        # final_pdf:str = "" # for pdf output
-        # final_html:str = "" # for html output with included boilerplate
-        # final_txt:str = "" # for txt output
-        # final_md:str = "" # for md output
-        # final_doc:str = "" # for doc output
-
-# --------------------
-
         # DONE ✅ 
         # checks for incomplete output format and formats respective file type
         match vital_information_dict["OUTPUT_FORMAT"]:
             case "PDF":
-                final_draft_charge_array.append((token_array[0],final_pdf))
+                final_pdf:str = pdf_draft_charge_gen(vital_information_dict)
+                final_draft_charge_array.append((f"{token_array[0]}-Draft-Charge-{draft_charge_count}.pdf", final_pdf))
             case "HTML":
-                final_draft_charge_array.append((token_array[0],final_html))
+                final_html:str = html_draft_charge_gen(vital_information_dict)
+                final_draft_charge_array.append((f"{token_array[0]}-Draft-Charge-{draft_charge_count}.html", final_html))
+            # DONE ✅ 
             case "TXT":
-                final_draft_charge_array.append((token_array[0],final_txt))
+                final_txt:str = txt_draft_charge_gen(vital_information_dict)
+                final_draft_charge_array.append((f"{token_array[0]}-Draft-Charge-{draft_charge_count}.txt", final_txt))
             case "MD":
-                final_draft_charge_array.append((token_array[0],final_md))
+                final_md:str = md_draft_charge_gen(vital_information_dict)
+                final_draft_charge_array.append((f"{token_array[0]}-Draft-Charge-{draft_charge_count}.md", final_md))
             case "DOC":
-                final_draft_charge_array.append((token_array[0],final_doc))
+                final_doc:str = doc_draft_charge_gen(vital_information_dict)
+                final_draft_charge_array.append((f"{token_array[0]}-Draft-Charge-{draft_charge_count}.docx", final_doc))
             case "":
                 print(f"Incomplete information detected in Draft Charge {draft_charge_count}. Output format not provided. Please provide one.")
                 return None
@@ -416,8 +412,11 @@ def parser_interpreter(overall_token_array:list[tuple]):
                 print("Error Code 0002. Drop me a message on @gongahkia.")
                 return None
 
-# --------------------
+        print(vital_information_dict)
 
+# --------------------
+    
+    print(final_draft_charge_array)
     return final_draft_charge_array
 
 # --------------------
@@ -434,6 +433,8 @@ def check_date_format(date:str) -> bool | None :
     except (ValueError, IndexError):
         print(f"Syntax error detected in the date provided: {date}. Please adhere to the specified format of DD/MM/YYYY and use integers for all values.")
         return False
+
+# --------------------
 
 # DONE ✅ 
 def create_date(date:str) -> str | None:
@@ -467,3 +468,60 @@ def create_date(date:str) -> str | None:
         case _:
             return None
     return f"{day} {month} {year}"
+
+# --------------------
+
+# ~!FUA!~
+    # - add functions here for each file format, to create the relevant file content for each file format from the vital_information_dict data structure
+
+# --------------------
+
+def pdf_draft_charge_gen(vital_information_dict:dict) -> str:
+    final_charge_txt:str = f'''
+
+                            '''
+    return final_charge_txt
+
+def md_draft_charge_gen(vital_information_dict:dict) -> str:
+    final_charge_txt:str = f'''
+
+                            '''
+    return final_charge_txt
+
+def doc_draft_charge_gen(vital_information_dict:dict) -> str:
+    final_charge_txt:str = f'''
+
+                            '''
+    return final_charge_txt
+
+def html_draft_charge_gen(vital_information_dict:dict) -> str:
+    final_charge_txt:str = f'''
+
+                            '''
+    return final_charge_txt
+
+# DONE ✅ 
+def txt_draft_charge_gen(vital_information_dict:dict) -> str:
+    final_charge_txt:str = f'''Criminal Procedure Code 2010
+                            (Chapter 68)
+                            Revised Edition 2012
+                            Sections 123-125
+
+                            Charge
+
+                            You, 
+
+                            Name: {vital_information_dict["SUSPECT_NAME"]}
+                            NRIC: {vital_information_dict["SUSPECT_NRIC"]}
+                            RACE: {vital_information_dict["SUSPECT_RACE"]}
+                            AGE: {vital_information_dict["SUSPECT_AGE"]}
+                            SEX: {vital_information_dict["SUSPECT_GENDER"]}
+                            NATIONALITY: {vital_information_dict["SUSPECT_NATIONALITY"]}
+                           
+                           are charged that you, on (or about) {vital_information_dict["OFFENSE_DATE"]} at [location, add as necessary], Singapore, did [add brief summary of charge], to wit {vital_information_dict["CHARGE_EXPLANATION"]}, and you have thereby committed an offence under {vital_information_dict["STATUTE"]}.
+
+                           {vital_information_dict["CHARGING_OFFICER"]}
+                           {vital_information_dict["ROLE_DIV"]}
+                           {vital_information_dict["CHARGING_DATE"]}
+                            '''
+    return final_charge_txt
