@@ -10,10 +10,6 @@
         # - test, test and retest to ensure that there are no issues with the interpreter accepting invalid input
         # - debug carefully
 
-    # THINK ABOUT WITH REGARD TO COMMENTS
-        # - is there any real distinction between commented text and text with no comments? since both are technically ignored?
-        # - ensure that i can easily comment out large chunks of relevant text with a set of #comments#, otherwise i can remove any mention of comments as well if functionality will be entirely the same regardless
-
 # --------------------
 
 def parser_interpreter(overall_token_array:list[tuple]):
