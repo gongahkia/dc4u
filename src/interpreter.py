@@ -28,6 +28,7 @@ def parser_interpreter(overall_token_array:list[tuple]) -> (list[tuple]) | None:
         final_html:str = "" # for html output with included boilerplate
         final_txt:str = "" # for txt output
         final_md:str = "" # for md output
+        final_rmd:str = "" # for rmd output
         final_doc:str = "" # for doc output
 
         vital_information_dict:dict = { "OUTPUT_FORMAT":"", 
@@ -82,10 +83,12 @@ def parser_interpreter(overall_token_array:list[tuple]) -> (list[tuple]) | None:
                                     vital_information_dict["OUTPUT_FORMAT"] = "TXT"
                                 case "MD":
                                     vital_information_dict["OUTPUT_FORMAT"] = "MD"
-                                case "DOC":
-                                    vital_information_dict["OUTPUT_FORMAT"] = "DOC"
+                                case "DOCX":
+                                    vital_information_dict["OUTPUT_FORMAT"] = "DOCX"
+                                case "RMD":
+                                    vital_information_dict["OUTPUT_FORMAT"] = "RMD"
                                 case _:
-                                    print(f"Unrecognised output format detected in Draft Charge {draft_charge_count}! DC currently supports one of the following [PDF/HTML/TXT/MD/DOC].")
+                                    print(f"Unrecognised output format detected in Draft Charge {draft_charge_count}! DC currently supports one of the following [PDF/HTML/TXT/MD/RMD/DOCX].")
                                     return None
                             if token_array[1][i+2]["type"] == "OUTPUT_FORMAT":
                                 pass
@@ -402,7 +405,10 @@ def parser_interpreter(overall_token_array:list[tuple]) -> (list[tuple]) | None:
             case "MD":
                 final_md:str = md_draft_charge_gen(vital_information_dict)
                 final_draft_charge_array.append((f"{token_array[0]}-Draft-Charge-{draft_charge_count}.md", final_md))
-            case "DOC":
+            case "RMD":
+                final_rmd:str = rmd_draft_charge_gen(vital_information_dict)
+                final_draft_charge_array.append((f"{token_array[0]}-Draft-Charge-{draft_charge_count}.rmd", final_rmd))
+            case "DOCX":
                 final_doc:str = doc_draft_charge_gen(vital_information_dict)
                 final_draft_charge_array.append((f"{token_array[0]}-Draft-Charge-{draft_charge_count}.docx", final_doc))
             case "":
@@ -476,13 +482,13 @@ def create_date(date:str) -> str | None:
 
 # --------------------
 
-def pdf_draft_charge_gen(vital_information_dict:dict) -> str:
+def rmd_draft_charge_gen(vital_information_dict:dict) -> str:
     final_charge_txt:str = f'''
 
                             '''
     return final_charge_txt
 
-def md_draft_charge_gen(vital_information_dict:dict) -> str:
+def pdf_draft_charge_gen(vital_information_dict:dict) -> str:
     final_charge_txt:str = f'''
 
                             '''
@@ -494,20 +500,14 @@ def doc_draft_charge_gen(vital_information_dict:dict) -> str:
                             '''
     return final_charge_txt
 
-def html_draft_charge_gen(vital_information_dict:dict) -> str:
-    final_charge_txt:str = f'''
-
-                            '''
-    return final_charge_txt
-
 # DONE ✅ 
 def txt_draft_charge_gen(vital_information_dict:dict) -> str:
     final_charge_txt:str = f'''Criminal Procedure Code 2010
-                            (Chapter 68)
-                            Revised Edition 2012
-                            Sections 123-125
+                            (CHAPTER 68)
+                            REVISED EDITION 2012
+                            SECTIONS 123-125
 
-                            Charge
+                            CHARGE
 
                             You, 
 
@@ -525,3 +525,66 @@ def txt_draft_charge_gen(vital_information_dict:dict) -> str:
                            {vital_information_dict["CHARGING_DATE"]}
                             '''
     return final_charge_txt
+
+# DONE ✅ 
+def md_draft_charge_gen(vital_information_dict:dict) -> str:
+    final_charge_txt:str = f'''<h2 align="center"><u>Criminal Procedure Code 2010</u></h2>
+                            <h2 align="center"><u>(CHAPTER 68)</u></h2>
+                            <h2 align="center"><u>REVISED EDITION 2012</u></h2>
+                            <h2 align="center"><u>SECTIONS 123-125</u></h2>
+
+                            <h2 align="center"><u>CHARGE</u></h2>
+
+                            You, 
+
+                            <div align="center"><b>Name: {vital_information_dict["SUSPECT_NAME"]}</b></div>
+                            <div align="center"><b>NRIC: {vital_information_dict["SUSPECT_NRIC"]}</b></div>
+                            <div align="center"><b>RACE: {vital_information_dict["SUSPECT_RACE"]}</b></div>
+                            <div align="center"><b>AGE: {vital_information_dict["SUSPECT_AGE"]}</b></div>
+                            <div align="center"><b>SEX: {vital_information_dict["SUSPECT_GENDER"]}</b></div>
+                            <div align="center"><b>NATIONALITY: {vital_information_dict["SUSPECT_NATIONALITY"]}</b</div>
+                           
+                           are charged that you, on (or about) {vital_information_dict["OFFENSE_DATE"]} at [location, add as necessary], Singapore, did [add brief summary of charge], to wit {vital_information_dict["CHARGE_EXPLANATION"]}, and you have thereby committed an offence under {vital_information_dict["STATUTE"]}.
+
+                           {vital_information_dict["CHARGING_OFFICER"]}
+                           {vital_information_dict["ROLE_DIV"]}
+                           {vital_information_dict["CHARGING_DATE"]}
+                            '''
+    return final_charge_txt
+
+# DONE ✅ 
+def html_draft_charge_gen(vital_information_dict:dict) -> str:
+    final_charge_txt:str = f'''<!doctype HTML>
+                                <html>
+                                    <head>
+                                        <title>Draft Charge</title>
+                                        <meta charset='UTF-8'>
+                                        <meta name="viewport" content="width=device-width, initial-scale=1" />
+                                    </head>
+                                    <body>
+                                        <h2 align="center"><u>Criminal Procedure Code 2010</u></h2>
+                                        <h2 align="center"><u>(CHAPTER 68)</u></h2>
+                                        <h2 align="center"><u>REVISED EDITION 2012</u></h2>
+                                        <h2 align="center"><u>SECTIONS 123-125</u></h2>
+
+                                        <h2 align="center"><u>CHARGE</u></h2>
+
+                                        <div>You,</div>
+
+                                        <div align="center"><b>Name: {vital_information_dict["SUSPECT_NAME"]}</b></div>
+                                        <div align="center"><b>NRIC: {vital_information_dict["SUSPECT_NRIC"]}</b></div>
+                                        <div align="center"><b>RACE: {vital_information_dict["SUSPECT_RACE"]}</b></div>
+                                        <div align="center"><b>AGE: {vital_information_dict["SUSPECT_AGE"]}</b></div>
+                                        <div align="center"><b>SEX: {vital_information_dict["SUSPECT_GENDER"]}</b></div>
+                                        <div align="center"><b>NATIONALITY: {vital_information_dict["SUSPECT_NATIONALITY"]}</b</div>
+                                    
+                                        <div>are charged that you, on (or about) {vital_information_dict["OFFENSE_DATE"]} at [location, add as necessary], Singapore, did [add brief summary of charge], to wit {vital_information_dict["CHARGE_EXPLANATION"]}, and you have thereby committed an offence under {vital_information_dict["STATUTE"]}.</div>
+
+                                        <div>{vital_information_dict["CHARGING_OFFICER"]}</div>
+                                        <div>{vital_information_dict["ROLE_DIV"]}</div>
+                                        <div>{vital_information_dict["CHARGING_DATE"]}</div>
+                                    </body>
+                                </html>
+                            '''
+    return final_charge_txt
+
