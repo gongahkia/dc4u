@@ -484,7 +484,14 @@ def create_date(date:str) -> str | None:
 
 def rmd_draft_charge_gen(vital_information_dict:dict) -> str:
     final_charge_txt:str = f'''
+                            ---
+                            title:"Draft Charge [edit accordingly]"
+                            author: [edit accordingly]
+                            date: [edit accordingly]
+                            output: [edit accordingly]
+                            ---
 
+                            FUA: add more here!
                             '''
     return final_charge_txt
 
