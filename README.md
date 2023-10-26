@@ -47,6 +47,10 @@ Refer to `samples/eg.dc` for examples and expansion on `.dc` syntax.
 
 # Screenshots
 
+Example of a draft charge 
+
+![](assets/draft-charge-eg.png)
+
 # Installation
 
 ```console
