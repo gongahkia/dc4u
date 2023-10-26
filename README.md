@@ -47,7 +47,7 @@ Refer to `samples/eg.dc` for examples and expansion on `.dc` syntax.
 
 # Screenshots
 
-Example of a draft charge 
+* Example of a draft charge created with `DC4U`
 
 ![](assets/draft-charge-eg.png)
 
