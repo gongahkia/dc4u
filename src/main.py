@@ -41,7 +41,17 @@ dc_array:list[tuple] | None = inter.parser_interpreter(main()) # expressing the 
 if dc_array is not None:
     for dc in dc_array:
         dc_file_name:str = dc[0] 
-        dc_contents:str = dc[1]
+        dc_file_contents:str = dc[1]
+
+        if "|" in dc_file_name:
+            match dc_file_name.split("|")[-1]:
+                case "PDF":
+                    dc_file_name = dc_file_name.split("|")[0]
+                case "DOCX":
+                    dc_file_name = dc_file_name.split("|")[0]
+        fhand = open(dc_file_name,"w")
+        fhand.write(dc_file_contents)
+        fhand.close()
 
 """parsed_tuple_output:tuple = inter.parser_interpreter(main())
 file_name, output_src = parsed_tuple_output[0], parsed_tuple_output[1]

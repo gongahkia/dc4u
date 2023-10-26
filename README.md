@@ -60,6 +60,10 @@ $ sudo apt install texlive-latex-base texlive-fonts-recommended texlive-latex-ex
 $ sudo R
 > install.packages("rmarkdown")
 > install.packages("officedown")
+> install.packages('tinytex')
+> tinytex::install_tinytex()
+> Save workspace image? [y/n/c]: n
+$ exit
 ```
 
 ## OSX
@@ -72,4 +76,8 @@ $ brew install --cask rstudio
 $ R
 > install.packages("rmarkdown")
 > install.packages("officedown")
+> install.packages('tinytex')
+> tinytex::install_tinytex()
+> Save workspace image? [y/n/c]: n
+$ exit
 ```
