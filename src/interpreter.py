@@ -29,7 +29,7 @@ def parser_interpreter(overall_token_array:list[tuple]) -> (list[tuple]) | None:
         final_txt:str = "" # for txt output
         final_md:str = "" # for md output
         final_rmd:str = "" # for rmd output
-        final_doc:str = "" # for doc output
+        final_docx:str = "" # for docx output
 
         vital_information_dict:dict = { "OUTPUT_FORMAT":"", 
                                         "SUSPECT_NAME":"", 
@@ -409,8 +409,8 @@ def parser_interpreter(overall_token_array:list[tuple]) -> (list[tuple]) | None:
                 final_rmd:str = rmd_draft_charge_gen(vital_information_dict)
                 final_draft_charge_array.append((f"{token_array[0]}-Draft-Charge-{draft_charge_count}.rmd", final_rmd))
             case "DOCX":
-                final_doc:str = doc_draft_charge_gen(vital_information_dict)
-                final_draft_charge_array.append((f"{token_array[0]}-Draft-Charge-{draft_charge_count}.docx", final_doc))
+                final_docx:str = docx_draft_charge_gen(vital_information_dict)
+                final_draft_charge_array.append((f"{token_array[0]}-Draft-Charge-{draft_charge_count}.docx", final_docx))
             case "":
                 print(f"Incomplete information detected in Draft Charge {draft_charge_count}. Output format not provided. Please provide one.")
                 return None
@@ -482,28 +482,15 @@ def create_date(date:str) -> str | None:
 
 # --------------------
 
-def rmd_draft_charge_gen(vital_information_dict:dict) -> str:
-    final_charge_txt:str = f'''
-                            ---
-                            title:"Draft Charge [edit accordingly]"
-                            author: [edit accordingly]
-                            date: [edit accordingly]
-                            output: [edit accordingly]
-                            ---
-
-                            FUA: add more here!
-                            '''
-    return final_charge_txt
-
 def pdf_draft_charge_gen(vital_information_dict:dict) -> str:
     final_charge_txt:str = f'''
-
+    # FUA: to convert HTML to PDF using a tool like this https://wkhtmltopdf.org/
                             '''
     return final_charge_txt
 
-def doc_draft_charge_gen(vital_information_dict:dict) -> str:
+def docx_draft_charge_gen(vital_information_dict:dict) -> str:
     final_charge_txt:str = f'''
-
+    # FUA: to convert HTML to DOCX using a tool like pandoc or https://unix.stackexchange.com/questions/533886/is-there-a-command-line-tool-for-converting-html-files-to-pdf or https://www.npmjs.com/package/html-to-docx or https://stackoverflow.com/questions/32755607/convert-html-to-docx-using-pandoc
                             '''
     return final_charge_txt
 
@@ -551,6 +538,44 @@ def md_draft_charge_gen(vital_information_dict:dict) -> str:
                             <div align="center"><b>SEX: {vital_information_dict["SUSPECT_GENDER"]}</b></div>
                             <div align="center"><b>NATIONALITY: {vital_information_dict["SUSPECT_NATIONALITY"]}</b</div>
                            
+                           are charged that you, on (or about) {vital_information_dict["OFFENSE_DATE"]} at [location, add as necessary], Singapore, did [add brief summary of charge], to wit {vital_information_dict["CHARGE_EXPLANATION"]}, and you have thereby committed an offence under {vital_information_dict["STATUTE"]}.
+
+                           {vital_information_dict["CHARGING_OFFICER"]}
+                           {vital_information_dict["ROLE_DIV"]}
+                           {vital_information_dict["CHARGING_DATE"]}
+                            '''
+    return final_charge_txt
+
+# DONE ✅ 
+def rmd_draft_charge_gen(vital_information_dict:dict) -> str:
+    final_charge_txt:str = f'''
+                            ---
+                            title:"Draft Charge [edit accordingly]"
+                            author: [edit accordingly]
+                            date: [edit accordingly]
+                            output: [edit accordingly]
+                            ---
+
+                            <center>
+                            **Criminal Procedure Code 2010**
+                            **(CHAPTER 68)**
+                            **REVISED EDITION 2012**
+                            **SECTIONS 123-125**
+
+                            **CHARGE**
+                            </center>
+
+                            You, 
+
+                            <center>
+                            **Name: {vital_information_dict["SUSPECT_NAME"]}**
+                            **NRIC: {vital_information_dict["SUSPECT_NRIC"]}**
+                            **RACE: {vital_information_dict["SUSPECT_RACE"]}**
+                            **AGE: {vital_information_dict["SUSPECT_AGE"]}**
+                            **SEX: {vital_information_dict["SUSPECT_GENDER"]}**
+                            **NATIONALITY: {vital_information_dict["SUSPECT_NATIONALITY"]}**
+                            </center>
+
                            are charged that you, on (or about) {vital_information_dict["OFFENSE_DATE"]} at [location, add as necessary], Singapore, did [add brief summary of charge], to wit {vital_information_dict["CHARGE_EXPLANATION"]}, and you have thereby committed an offence under {vital_information_dict["STATUTE"]}.
 
                            {vital_information_dict["CHARGING_OFFICER"]}

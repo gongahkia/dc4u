@@ -25,9 +25,9 @@ This format is intended to allow for quick integration with existing workflows w
 | `.txt` | Universal viewing | ![](https://img.shields.io/badge/build-up-darkgreen) |
 | `.md` | Formatted viewing | ![](https://img.shields.io/badge/build-up-darkgreen)|
 | `.html` | Rudimentary API implementation | ![](https://img.shields.io/badge/build-up-darkgreen) |
-| `.rmd` | Rudimentary integration of calculation and data vis | ![](https://img.shields.io/badge/build-in_progress-orange)
-| `.pdf` | Widely accepted format for sharing and viewing | ![](https://img.shields.io/badge/build-down-red) |
-| `.docx` | Microsoft clowns and google doc integration | ![](https://img.shields.io/badge/build-down-red)|
+| `.rmd` | Rudimentary integration of calculation and data vis | ![](https://img.shields.io/badge/build-up-darkgreen)
+| `.pdf` | Widely accepted format for sharing and viewing. Relies on existing toolchains to create a pdf document from HTML base. | ![](https://img.shields.io/badge/build-in_progress-orange) |
+| `.docx` | Microsoft clowns and google doc integration. Relies on existing toolchains to create a docx document from HTML base. | ![](https://img.shields.io/badge/build-in_progress-orange)|
 
 > Further Output formats implemented later. 
 
@@ -51,7 +51,7 @@ Refer to `samples/eg.dc` for examples and expansion on `.dc` syntax.
 
 ```console
 $ git clone https://github.com/gongahkia/dc4u
-# add further instructions here 
+# add further instructions here like prereq to install r markdown toolchain
 ```
 
 # Troubleshooting
