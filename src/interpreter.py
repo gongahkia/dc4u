@@ -3,7 +3,7 @@
 # FUA:
 
     # DEBUG GENERAL
-        # - Implement HTML converted to PDF and DOCX formats, figure out how to rework those toolchains for our files
+        # - Implement rmd converted to PDF and DOCX formats, figure out how to rework those toolchains for our files
         # - Implement actual writing of string data to files for markdown, html, rmarkdown and txt
         # - implement error messages and language syntax checking
         # - test, test and retest to ensure that there are no issues with the interpreter accepting invalid input
@@ -476,50 +476,9 @@ def create_date(date:str) -> str | None:
 
 # --------------------
 
-def pdf_draft_charge_gen(vital_information_dict:dict) -> str:
-    final_charge_txt:str = f'''
-    # FUA: to convert HTML to PDF using a tool like this https://wkhtmltopdf.org/
-                            '''
-    return final_charge_txt
+# FUA: do i need to rework this? if so, include the instructions for... 
+# Rscript -e 'rmarkdown::render("draft_charge.Rmd")'
 
-def docx_draft_charge_gen(vital_information_dict:dict) -> str:
-    final_charge_txt:str = f'''
-    # FUA: to convert HTML to DOCX using a tool like pandoc or https://unix.stackexchange.com/questions/533886/is-there-a-command-line-tool-for-converting-html-files-to-pdf or https://www.npmjs.com/package/html-to-docx or https://stackoverflow.com/questions/32755607/convert-html-to-docx-using-pandoc
-                            '''
-    return final_charge_txt
-
-# DONE ✅ 
-def txt_draft_charge_gen(vital_information_dict:dict) -> str:
-    final_charge_txt:str = f'''Criminal Procedure Code 2010
-                            (CHAPTER 68)
-                            REVISED EDITION 2012
-                            SECTIONS 123-125
-
-                            CHARGE
-
-                            You, 
-
-                            Name: {vital_information_dict["SUSPECT_NAME"]}
-                            NRIC: {vital_information_dict["SUSPECT_NRIC"]}
-                            RACE: {vital_information_dict["SUSPECT_RACE"]}
-                            AGE: {vital_information_dict["SUSPECT_AGE"]}
-                            SEX: {vital_information_dict["SUSPECT_GENDER"]}
-                            NATIONALITY: {vital_information_dict["SUSPECT_NATIONALITY"]}
-                           
-                           are charged that you, on (or about) {vital_information_dict["OFFENSE_DATE"]} at [location, add as necessary], Singapore, did [add brief summary of charge], to wit {vital_information_dict["CHARGE_EXPLANATION"]}, and you have thereby committed an offence under {vital_information_dict["STATUTE"]}.
-
-                           {vital_information_dict["CHARGING_OFFICER"]}
-                           {vital_information_dict["ROLE_DIV"]}
-                           {vital_information_dict["CHARGING_DATE"]}
-                            '''
-    return final_charge_txt
-
-# DONE ✅ 
-def md_draft_charge_gen(vital_information_dict:dict) -> str:
-    final_charge_txt:str = f'''<h2 align="center"><u>Criminal Procedure Code 2010</u></h2><h2 align="center"><u>(CHAPTER 68)</u></h2><h2 align="center"><u>REVISED EDITION 2012</u></h2><h2 align="center"><u>SECTIONS 123-125</u></h2><br><h2 align="center"><u>CHARGE</u></h2>You,<div align="center"><b>Name: {vital_information_dict["SUSPECT_NAME"]}</b></div><div align="center"><b>NRIC: {vital_information_dict["SUSPECT_NRIC"]}</b></div><div align="center"><b>RACE: {vital_information_dict["SUSPECT_RACE"]}</b></div><div align="center"><b>AGE: {vital_information_dict["SUSPECT_AGE"]}</b></div><div align="center"><b>SEX: {vital_information_dict["SUSPECT_GENDER"]}</b></div><div align="center"><b>NATIONALITY: {vital_information_dict["SUSPECT_NATIONALITY"]}</b></div><br>are charged that you, on (or about) {vital_information_dict["OFFENSE_DATE"]} at [location, add as necessary], Singapore, did [add brief summary of charge], <i>to wit</i> {vital_information_dict["CHARGE_EXPLANATION"]}, and you have thereby committed an offence under {vital_information_dict["STATUTE"]}.<br><br>{vital_information_dict["CHARGING_OFFICER"]}<br>{vital_information_dict["ROLE_DIV"]}<br>{vital_information_dict["CHARGING_DATE"]}'''
-    return final_charge_txt
-
-# DONE ✅ 
 def rmd_draft_charge_gen(vital_information_dict:dict) -> str:
     final_charge_txt:str = f'''
                             ---
@@ -555,6 +514,49 @@ def rmd_draft_charge_gen(vital_information_dict:dict) -> str:
                            {vital_information_dict["ROLE_DIV"]}
                            {vital_information_dict["CHARGING_DATE"]}
                             '''
+    return final_charge_txt
+
+def pdf_draft_charge_gen(vital_information_dict:dict) -> str:
+    final_charge_txt:str = f'''
+    # can i use rmarkdown?
+                            '''
+    return final_charge_txt
+
+def docx_draft_charge_gen(vital_information_dict:dict) -> str:
+    final_charge_txt:str = f'''
+    # use rmarkdown with docx as the desired output; see what packages i need to download oop
+                            '''
+    return final_charge_txt
+
+# DONE ✅ 
+def txt_draft_charge_gen(vital_information_dict:dict) -> str:
+    final_charge_txt:str = f'''Criminal Procedure Code 2010
+                            (CHAPTER 68)
+                            REVISED EDITION 2012
+                            SECTIONS 123-125
+
+                            CHARGE
+
+                            You, 
+
+                            Name: {vital_information_dict["SUSPECT_NAME"]}
+                            NRIC: {vital_information_dict["SUSPECT_NRIC"]}
+                            RACE: {vital_information_dict["SUSPECT_RACE"]}
+                            AGE: {vital_information_dict["SUSPECT_AGE"]}
+                            SEX: {vital_information_dict["SUSPECT_GENDER"]}
+                            NATIONALITY: {vital_information_dict["SUSPECT_NATIONALITY"]}
+                           
+                           are charged that you, on (or about) {vital_information_dict["OFFENSE_DATE"]} at [location, add as necessary], Singapore, did [add brief summary of charge], to wit {vital_information_dict["CHARGE_EXPLANATION"]}, and you have thereby committed an offence under {vital_information_dict["STATUTE"]}.
+
+                           {vital_information_dict["CHARGING_OFFICER"]}
+                           {vital_information_dict["ROLE_DIV"]}
+                           {vital_information_dict["CHARGING_DATE"]}
+                            '''
+    return final_charge_txt
+
+# DONE ✅ 
+def md_draft_charge_gen(vital_information_dict:dict) -> str:
+    final_charge_txt:str = f'''<h2 align="center"><u>Criminal Procedure Code 2010</u></h2><h2 align="center"><u>(CHAPTER 68)</u></h2><h2 align="center"><u>REVISED EDITION 2012</u></h2><h2 align="center"><u>SECTIONS 123-125</u></h2><br><h2 align="center"><u>CHARGE</u></h2>You,<div align="center"><b>Name: {vital_information_dict["SUSPECT_NAME"]}</b></div><div align="center"><b>NRIC: {vital_information_dict["SUSPECT_NRIC"]}</b></div><div align="center"><b>RACE: {vital_information_dict["SUSPECT_RACE"]}</b></div><div align="center"><b>AGE: {vital_information_dict["SUSPECT_AGE"]}</b></div><div align="center"><b>SEX: {vital_information_dict["SUSPECT_GENDER"]}</b></div><div align="center"><b>NATIONALITY: {vital_information_dict["SUSPECT_NATIONALITY"]}</b></div><br>are charged that you, on (or about) {vital_information_dict["OFFENSE_DATE"]} at [location, add as necessary], Singapore, did [add brief summary of charge], <i>to wit</i> {vital_information_dict["CHARGE_EXPLANATION"]}, and you have thereby committed an offence under {vital_information_dict["STATUTE"]}.<br><br>{vital_information_dict["CHARGING_OFFICER"]}<br>{vital_information_dict["ROLE_DIV"]}<br>{vital_information_dict["CHARGING_DATE"]}'''
     return final_charge_txt
 
 # DONE ✅ 
