@@ -26,8 +26,8 @@ This format is intended to allow for quick integration with existing workflows w
 | `.md` | Formatted viewing | ![](https://img.shields.io/badge/build-up-darkgreen)|
 | `.html` | Rudimentary API implementation | ![](https://img.shields.io/badge/build-up-darkgreen) |
 | `.rmd` | Rudimentary integration of calculation and data vis | ![](https://img.shields.io/badge/build-up-darkgreen)
-| `.pdf` | Widely accepted format for sharing and viewing. Relies on existing R and Pandoc toolchains. | ![](https://img.shields.io/badge/build-in_progress-orange) |
-| `.docx` | Microsoft clowns and google doc integration. Relies on existing R and Pandoc toolchains. | ![](https://img.shields.io/badge/build-in_progress-orange)|
+| `.pdf` | Widely accepted format for sharing and viewing. Relies on existing R and Pandoc toolchains. | ![](https://img.shields.io/badge/build-up-darkgreen) |
+| `.docx` | Microsoft clowns and google doc integration. Relies on existing R and Pandoc toolchains. | ![](https://img.shields.io/badge/build-up-darkgreen)|
 
 ## Language syntax
 
@@ -50,6 +50,8 @@ Refer to `samples/eg.dc` for examples and expansion on `.dc` syntax.
 ![](assets/draft-charge-eg.png)
 
 # Installation
+
+This installation handles R markdown default toolchain's installation, as well as compilation targets to `.pdf` and `.docx`.
 
 ## WSL (Debian)
 

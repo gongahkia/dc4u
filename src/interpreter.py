@@ -1,14 +1,5 @@
 # Interpreter --> implements dc language syntax and runs checks before compiling to diff output formats
 
-# FUA:
-
-    # DEBUG GENERAL
-        # - Implement rmd converted to PDF and DOCX formats, figure out how to rework those toolchains for our files
-        # - implement error messages and language syntax checking
-        # - test, test and retest to ensure that there are no issues with the interpreter accepting invalid input
-
-# --------------------
-
 # DONE ✅ 
 def parser_interpreter(overall_token_array:list[tuple]) -> (list[tuple]) | None:
 
@@ -416,11 +407,11 @@ def parser_interpreter(overall_token_array:list[tuple]) -> (list[tuple]) | None:
                 print("Error Code 0002. Drop me a message on @gongahkia.")
                 return None
 
-        print(vital_information_dict)
+        # print(vital_information_dict)
 
 # --------------------
     
-    print(final_draft_charge_array)
+    # print(final_draft_charge_array)
     return final_draft_charge_array
 
 # --------------------
@@ -475,7 +466,7 @@ def create_date(date:str) -> str | None:
 
 # --------------------
 
-# FUA: debug THIS alloted format for rmd first, then copy and paste and test desired string output for docx and pdf
+# DONE ✅ 
 def rmd_draft_charge_gen(vital_information_dict:dict) -> str:
     final_charge_txt:str = f'''
 ---
@@ -491,16 +482,14 @@ output: [edit accordingly]
 
 You, 
 
-<div style="text-align:center;">
-<b>Name:</b> {vital_information_dict["SUSPECT_NAME"]}<br/>
-<b>NRIC:</b> {vital_information_dict["SUSPECT_NRIC"]}<br/>
-<b>RACE:</b> {vital_information_dict["SUSPECT_RACE"]}<br/>
-<b>AGE:</b> {vital_information_dict["SUSPECT_AGE"]}<br/>
-<b>SEX:</b> {vital_information_dict["SUSPECT_GENDER"]}<br/>
-<b>NATIONALITY:</b> {vital_information_dict["SUSPECT_NATIONALITY"]}
-</div>
+**Name:** {vital_information_dict["SUSPECT_NAME"]}
+**NRIC:** {vital_information_dict["SUSPECT_NRIC"]}
+**RACE:** {vital_information_dict["SUSPECT_RACE"]}
+**AGE:** {vital_information_dict["SUSPECT_AGE"]}
+**SEX:** {vital_information_dict["SUSPECT_GENDER"]}
+**NATIONALITY:** {vital_information_dict["SUSPECT_NATIONALITY"]}
 
-are charged that you, on (or about) {vital_information_dict["OFFENSE_DATE"]} at [location, add as necessary], Singapore, did [add brief summary of charge], <i>to wit</i> {vital_information_dict["CHARGE_EXPLANATION"]}, and you have thereby committed an offence under {vital_information_dict["STATUTE"]}.
+are charged that you, on (or about) {vital_information_dict["OFFENSE_DATE"]} at [location, add as necessary], Singapore, did [add brief summary of charge], *to wit* {vital_information_dict["CHARGE_EXPLANATION"]}, and you have thereby committed an offence under {vital_information_dict["STATUTE"]}.
 
 {vital_information_dict["CHARGING_OFFICER"]}
 {vital_information_dict["ROLE_DIV"]}
@@ -508,15 +497,65 @@ are charged that you, on (or about) {vital_information_dict["OFFENSE_DATE"]} at 
                             '''
     return final_charge_txt
 
+# DONE ✅ 
 def pdf_draft_charge_gen(vital_information_dict:dict) -> str:
     final_charge_txt:str = f'''
-    # ADD AFTER CONFIRMING RMD
+---
+output: pdf_document
+---
+
+# Criminal Procedure Code 2010
+# (CHAPTER 68)
+# REVISED EDITION 2012
+# SECTIONS 123-125
+
+# CHARGE
+
+You, 
+
+**Name:** {vital_information_dict["SUSPECT_NAME"]}
+**NRIC:** {vital_information_dict["SUSPECT_NRIC"]}
+**RACE:** {vital_information_dict["SUSPECT_RACE"]}
+**AGE:** {vital_information_dict["SUSPECT_AGE"]}
+**SEX:** {vital_information_dict["SUSPECT_GENDER"]}
+**NATIONALITY:** {vital_information_dict["SUSPECT_NATIONALITY"]}
+
+are charged that you, on (or about) {vital_information_dict["OFFENSE_DATE"]} at [location, add as necessary], Singapore, did [add brief summary of charge], *to wit* {vital_information_dict["CHARGE_EXPLANATION"]}, and you have thereby committed an offence under {vital_information_dict["STATUTE"]}.
+
+{vital_information_dict["CHARGING_OFFICER"]}
+{vital_information_dict["ROLE_DIV"]}
+{vital_information_dict["CHARGING_DATE"]}
                             '''
     return final_charge_txt
 
+# DONE ✅ 
 def docx_draft_charge_gen(vital_information_dict:dict) -> str:
     final_charge_txt:str = f'''
-    # ADD AFTER CONFIRMING RMD
+---
+output: officedown::rdocx_document
+---
+
+# Criminal Procedure Code 2010
+# (CHAPTER 68)
+# REVISED EDITION 2012
+# SECTIONS 123-125
+
+# CHARGE
+
+You, 
+
+**Name:** {vital_information_dict["SUSPECT_NAME"]}
+**NRIC:** {vital_information_dict["SUSPECT_NRIC"]}
+**RACE:** {vital_information_dict["SUSPECT_RACE"]}
+**AGE:** {vital_information_dict["SUSPECT_AGE"]}
+**SEX:** {vital_information_dict["SUSPECT_GENDER"]}
+**NATIONALITY:** {vital_information_dict["SUSPECT_NATIONALITY"]}
+
+are charged that you, on (or about) {vital_information_dict["OFFENSE_DATE"]} at [location, add as necessary], Singapore, did [add brief summary of charge], *to wit* {vital_information_dict["CHARGE_EXPLANATION"]}, and you have thereby committed an offence under {vital_information_dict["STATUTE"]}.
+
+{vital_information_dict["CHARGING_OFFICER"]}
+{vital_information_dict["ROLE_DIV"]}
+{vital_information_dict["CHARGING_DATE"]}
                             '''
     return final_charge_txt
 
