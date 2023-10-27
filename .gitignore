@@ -2,7 +2,3 @@ src/__pycache__
 __pycache__
 node_modules
 frontend/app/app.js
-frontend/app/event.js
-frontend/app/main.js
-frontend/app/lexer.js
-frontend/app/interpreter.js
