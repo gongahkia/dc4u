@@ -382,23 +382,23 @@ def parser_interpreter(overall_token_array:list[tuple]) -> (list[tuple]) | None:
         # checks for incomplete output format and formats respective file type
         match vital_information_dict["OUTPUT_FORMAT"]:
             case "PDF":
-                final_pdf:str = pdf_draft_charge_gen(vital_information_dict)
+                final_pdf = pdf_draft_charge_gen(vital_information_dict)
                 final_draft_charge_array.append((f"{token_array[0]}-Draft-Charge-{draft_charge_count}.rmd|PDF", final_pdf))
             case "HTML":
-                final_html:str = html_draft_charge_gen(vital_information_dict)
+                final_html = html_draft_charge_gen(vital_information_dict)
                 final_draft_charge_array.append((f"{token_array[0]}-Draft-Charge-{draft_charge_count}.html", final_html))
             # DONE ✅ 
             case "TXT":
-                final_txt:str = txt_draft_charge_gen(vital_information_dict)
+                final_txt = txt_draft_charge_gen(vital_information_dict)
                 final_draft_charge_array.append((f"{token_array[0]}-Draft-Charge-{draft_charge_count}.txt", final_txt))
             case "MD":
-                final_md:str = md_draft_charge_gen(vital_information_dict)
+                final_md = md_draft_charge_gen(vital_information_dict)
                 final_draft_charge_array.append((f"{token_array[0]}-Draft-Charge-{draft_charge_count}.md", final_md))
             case "RMD":
-                final_rmd:str = rmd_draft_charge_gen(vital_information_dict)
+                final_rmd = rmd_draft_charge_gen(vital_information_dict)
                 final_draft_charge_array.append((f"{token_array[0]}-Draft-Charge-{draft_charge_count}.rmd", final_rmd))
             case "DOCX":
-                final_docx:str = docx_draft_charge_gen(vital_information_dict)
+                final_docx = docx_draft_charge_gen(vital_information_dict)
                 final_draft_charge_array.append((f"{token_array[0]}-Draft-Charge-{draft_charge_count}.rmd|DOCX", final_docx))
             case "":
                 print(f"Incomplete information detected in Draft Charge {draft_charge_count}. Output format not provided. Please provide one.")
@@ -439,27 +439,27 @@ def create_date(date:str) -> str | None:
         case 1:
             month:str = "January"
         case 2:
-            month:str = "February"
+            month = "February"
         case 3:
-            month:str = "March"
+            month = "March"
         case 4:
-            month:str = "April"
+            month = "April"
         case 5:
-            month:str = "May"
+            month = "May"
         case 6:
-            month:str = "June"
+            month = "June"
         case 7:
-            month:str = "July"
+            month = "July"
         case 8:
-            month:str = "August"
+            month = "August"
         case 9:
-            month:str = "September"
+            month = "September"
         case 10:
-            month:str = "October"
+            month = "October"
         case 11:
-            month:str = "November"
+            month = "November"
         case 12:
-            month:str = "December"
+            month = "December"
         case _:
             return None
     return f"{day} {month} {year}"

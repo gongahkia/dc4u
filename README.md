@@ -51,11 +51,12 @@ Refer to `samples/eg.dc` for examples and expansion on `.dc` syntax.
 
 # Installation
 
-This installation handles R markdown default toolchain's installation, as well as compilation targets to `.pdf` and `.docx`.
+This installation also handles R markdown default toolchain's installation, as well as compilation targets to `.pdf` and `.docx`.
 
 ## WSL (Debian)
 
 ```console
+$ git clone https://github.com/gongahkia/dc4u
 $ sudo apt update && sudo apt upgrade && sudo apt autoremove
 $ sudo apt -y install r-base gdebi-core pandoc-citeproc
 $ sudo apt install texlive-latex-base texlive-fonts-recommended texlive-latex-extra
