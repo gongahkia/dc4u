@@ -1,0 +1,167 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use v5.32;
+
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+
+use DC4U;
+use Getopt::Long;
+use Pod::Usage;
+
+=head1 NAME
+
+dc4u - Draft Charges 4 U - Legal Document Generator
+
+=head1 SYNOPSIS
+
+    dc4u [options] <input_file>
+    
+    Options:
+        --format, -f FORMAT    Output format (PDF, HTML, TXT, MD, RMD, DOCX)
+        --output, -o FILE     Output file
+        --config, -c FILE     Configuration file
+        --batch, -b           Batch processing mode
+        --verbose, -v         Verbose output
+        --quiet, -q           Quiet mode
+        --help, -h            Show help
+        --version            Show version
+
+=head1 DESCRIPTION
+
+DC4U is a legal document generator that converts human-readable markup format (.dc) 
+into various output formats for legal draft charges.
+
+=head1 EXAMPLES
+
+    # Generate PDF from .dc file
+    dc4u --format PDF --output charge.pdf input.dc
+    
+    # Batch process multiple files
+    dc4u --batch --format HTML *.dc
+    
+    # Use configuration file
+    dc4u --config config.yaml --format PDF input.dc
+
+=cut
+
+# Command line options
+my $format = 'PDF';
+my $output_file;
+my $config_file;
+my $batch_mode = 0;
+my $verbose = 0;
+my $quiet = 0;
+my $help = 0;
+my $version = 0;
+
+GetOptions(
+    'format|f=s' => \$format,
+    'output|o=s' => \$output_file,
+    'config|c=s' => \$config_file,
+    'batch|b' => \$batch_mode,
+    'verbose|v' => \$verbose,
+    'quiet|q' => \$quiet,
+    'help|h' => \$help,
+    'version' => \$version
+) or pod2usage(2);
+
+# Show help
+if ($help) {
+    pod2usage(1);
+}
+
+# Show version
+if ($version) {
+    print "DC4U Version 2.0.0\n";
+    exit 0;
+}
+
+# Get input files
+my @input_files = @ARGV;
+
+if (@input_files == 0) {
+    print "Error: No input files specified\n";
+    pod2usage(2);
+}
+
+# Validate format
+my @valid_formats = qw/PDF HTML TXT MD RMD DOCX/;
+unless (grep { $_ eq $format } @valid_formats) {
+    print "Error: Invalid format '$format'. Valid formats: " . join(', ', @valid_formats) . "\n";
+    exit 1;
+}
+
+# Process files
+my $options = {
+    log_level => $verbose ? 'DEBUG' : ($quiet ? 'ERROR' : 'INFO'),
+    config_file => $config_file
+};
+
+for my $input_file (@input_files) {
+    unless (-f $input_file) {
+        print "Error: File '$input_file' not found\n";
+        next;
+    }
+    
+    my $output = $output_file;
+    if ($batch_mode) {
+        # Generate output filename
+        my ($name, $path, $suffix) = fileparse($input_file, qr/\.[^.]*$/);
+        $output = "${name}.${format}";
+    }
+    
+    unless ($output) {
+        print "Error: Output file not specified\n";
+        next;
+    }
+    
+    # Process file
+    eval {
+        my $results = DC4U::process_dc_file($input_file, $format, $options);
+        
+        if ($results && @$results > 0) {
+            # Write output
+            open my $fh, '>', $output or die "Cannot write to $output: $!";
+            print $fh $results->[0]->{output};
+            close $fh;
+            
+            print "Generated: $output\n" unless $quiet;
+        } else {
+            print "Error: No output generated for $input_file\n";
+        }
+    };
+    
+    if ($@) {
+        print "Error processing $input_file: $@\n";
+    }
+}
+
+# Helper function for file parsing
+sub fileparse {
+    my ($file, $suffix) = @_;
+    my ($name, $path) = $file =~ /^(.*\/)?([^\/]+)$/;
+    $path ||= '';
+    $name ||= '';
+    
+    if ($suffix && $file =~ /$suffix$/) {
+        $file =~ s/$suffix$//;
+        return ($file, $name, $suffix);
+    }
+    
+    return ($file, $name, '');
+}
+
+__END__
+
+=head1 AUTHOR
+
+DC4U Development Team
+
+=head1 LICENSE
+
+This software is licensed under the MIT License.
+
+=cut
