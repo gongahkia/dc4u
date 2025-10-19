@@ -51,7 +51,7 @@ Refer to `samples/eg.dc` for examples and expansion on `.dc` syntax.
 
 Example of a draft charge created with `DC4U`
 
-![](assets/draft-charge-eg.png)
+![](assets/reference/draft-charge-eg.png)
 
 # Installation
 
@@ -94,5 +94,5 @@ $ exit
 The name `dc4u` is in reference to [Funny Valentine](https://jojo.fandom.com/wiki/Funny_Valentine)'s (ファニー・ヴァレンタイン) [Stand](https://jojo.fandom.com/wiki/Stand) of the same name, [Dirty Deeds Done Dirt Cheap](https://jojo.fandom.com/wiki/Dirty_Deeds_Done_Dirt_Cheap) *(often shortened to D4C)* in [Part 7: Steel Ball Run](https://jojo.fandom.com/wiki/Steel_Ball_Run) of the ongoing manga series [JoJo's Bizarre Adventure](https://jojowiki.com/JoJo_Wiki).
 
 <div align="center">
-    <img src="./asset/logo/d4c.png" width="35%">
+    <img src="./assets/logo/dc4u.png" width="50%">
 </div>
