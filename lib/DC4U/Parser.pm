@@ -42,10 +42,10 @@ Parses tokens and returns structured data.
 =cut
 
 sub parse {
-    my ($self, $tokens) = @_;
+    my ($self, $tokens, $options) = @_;
     
     my $result = {
-        output_format => '',
+        output_format => $options->{output_format} || '',
         suspect_info => {},
         charge_info => {},
         statute_info => '',
@@ -69,12 +69,18 @@ sub parse {
         # Handle opening tokens
         if ($type eq 'OUTPUT_FORMAT') {
             if ($result->{output_format}) {
-                return { error => "Multiple output formats specified at line " . $token->{line} };
+                # Skip this output format token since we already have one from command line
+                if ($i + 1 <= $#$tokens && $tokens->[$i + 1]->{type} eq 'WORD') {
+                    $i++; # Skip the format token
+                }
+                next;
             }
             # Get next token as format
-            if ($i + 1 <= $#$tokens) {
+            if ($i + 1 <= $#$tokens && $tokens->[$i + 1]->{type} eq 'WORD') {
                 $result->{output_format} = $tokens->[$i + 1]->{value};
                 $i++; # Skip the format token
+            } else {
+                return { error => "Output format not specified after ` at line " . $token->{line} };
             }
         }
         elsif ($type eq 'L_SUSPECT_INFO') {
@@ -107,7 +113,8 @@ sub parse {
         }
         elsif ($type eq 'STATUTE_INFO') {
             if ($result->{statute_info}) {
-                return { error => "Multiple statute information specified at line " . $token->{line} };
+                # Skip this statute token since we already have one
+                next;
             }
             # Get content until next @
             my $statute_content = '';

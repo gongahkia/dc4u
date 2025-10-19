@@ -120,6 +120,7 @@ for my $input_file (@input_files) {
     
     # Process file
     eval {
+        $options->{output_format} = $format;
         my $results = DC4U::process_dc_file($input_file, $format, $options);
         
         if ($results && @$results > 0) {

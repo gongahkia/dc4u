@@ -100,7 +100,7 @@ sub process_dc_string {
         
         # Parse the tokens
         my $parser = DC4U::Parser->new();
-        my $parsed_data = $parser->parse($tokens);
+        my $parsed_data = $parser->parse($tokens, $options);
         
         if ($parsed_data->{error}) {
             $logger->error("Parse error in charge block " . ($i + 1) . ": " . $parsed_data->{error});
