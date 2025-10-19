@@ -1,140 +1,98 @@
-# DC4U - Draft Charges 4 U
+![Static Badge](https://img.shields.io/badge/DC4U_1.0-passing-green)
 
-![Static Badge](https://img.shields.io/badge/DC4U-multi--version-blue)
+# Draft Charges 4 U
 
-A Legal Draft Charge Creator with support for multiple versions.
+A Legal Draft Charge Creator.
 
-## 📁 Repository Structure
+## Motivation
 
-This repository contains two major versions of DC4U:
+[Draft charges](https://mustsharenews.com/wp-content/uploads/2018/12/TOC-Charge-Sheet.jpg) are inane to format. `DC4U` simplifies the entire process of creating Draft Charges, by transpiling a human-readable markup format (`.dc`) to different targets for viewing and distribution.
 
-### 🐍 **DC4U v1.0** (Python-based)
-- **Location**: `v1/` directory
-- **Language**: Python
-- **Architecture**: Monolithic
-- **Dependencies**: R, Pandoc, Python
-- **Status**: Legacy version
+This format is intended to allow for quick integration with existing workflows when taking down material facts.
 
-### 🐪 **DC4U v2.0** (Perl-based)
-- **Location**: `v2/` directory  
-- **Language**: Perl
-- **Architecture**: Modular
-- **Dependencies**: Perl modules
-- **Status**: Current version
+## Purpose
 
-## 🚀 Quick Start
+* Speed up process of formatting draft charges
+* Small source code binary and compilation target, faster compilation times
+* Simplify inane legal admin work for lawyers
+* `DC4U` transpiler takes in a simple reworked markup format and transpiles to multiple targets
+* Afraid you won't remember `.dc` language syntax? The `DC4U` transpiler will *kindly* point out the error and correct you accordingly.
 
-### Using DC4U v2.0 (Recommended)
+## Stack
 
-```bash
-# Navigate to v2 directory
-cd v2/
+...
 
-# Test the installation
-make test
+## Output formats
 
-# Install system-wide
-sudo make install
+| Output format | Purpose | Implementation status |
+| :---: | :---: | :---: |
+| `.txt` | Universal viewing | ![](https://img.shields.io/badge/build-up-darkgreen) |
+| `.md` | Formatted viewing | ![](https://img.shields.io/badge/build-up-darkgreen)|
+| `.html` | Rudimentary API implementation | ![](https://img.shields.io/badge/build-up-darkgreen) |
+| `.rmd` | Rudimentary integration of calculation and data vis | ![](https://img.shields.io/badge/build-up-darkgreen)
+| `.pdf` | Widely accepted format for sharing and viewing. Relies on existing R and Pandoc toolchains. | ![](https://img.shields.io/badge/build-up-darkgreen) |
+| `.docx` | Microsoft clowns and google doc integration. Relies on existing R and Pandoc toolchains. | ![](https://img.shields.io/badge/build-up-darkgreen)|
 
-# Generate a document
-bin/dc4u --format HTML --output charge.html examples/test_simple.dc
+## Language syntax
+
+Refer to `samples/eg.dc` for examples and expansion on `.dc` syntax.
+
+| **stylisation** | **syntax** | **notes** | **implementation status** |
+| :---: | :---: | :---: | :---: |
+| output format | \` ` | PDF, HTML, TXT, MD, DOC | ![](https://img.shields.io/badge/build-up-darkgreen) |
+| Suspect name; NRIC; Race; Age; Gender; Nationality | < > | | ![](https://img.shields.io/badge/build-up-darkgreen) |
+| Recommended charge title; Date of offence; Explication of charge | [ ] | | ![](https://img.shields.io/badge/build-up-darkgreen)  |
+| Relevant statute | @ @ | | ![](https://img.shields.io/badge/build-up-darkgreen) |
+| Charging officer; Role and Division; Date of charge | { } | | ![](https://img.shields.io/badge/build-up-darkgreen)  |
+| Comments | # # | Comments are ignored in the final formatted draft charge | ![](https://img.shields.io/badge/build-up-darkgreen)  |
+| Separator | --- | | ![](https://img.shields.io/badge/build-up-darkgreen)  |
+
+# Screenshots
+
+Example of a draft charge created with `DC4U`
+
+![](assets/draft-charge-eg.png)
+
+# Installation
+
+This installation also handles R markdown default toolchain's installation, as well as compilation targets to `.pdf` and `.docx`.
+
+## WSL (Debian)
+
+```console
+$ git clone https://github.com/gongahkia/dc4u
+$ sudo apt update && sudo apt upgrade && sudo apt autoremove
+$ sudo apt -y install r-base gdebi-core pandoc-citeproc
+$ sudo apt install texlive-latex-base texlive-fonts-recommended texlive-latex-extra
+$ sudo R
+> install.packages("rmarkdown")
+> install.packages("officedown")
+> install.packages('tinytex')
+> tinytex::install_tinytex()
+> Save workspace image? [y/n/c]: n
+$ exit
 ```
 
-### Using DC4U v1.0 (Legacy)
+## OSX
 
-```bash
-# Navigate to v1 directory
-cd v1/
-
-# Install dependencies
-make install-deps
-
-# Run the application
-make run
+```console
+$ git clone https://github.com/gongahkia/dc4u
+$ brew install r 
+$ brew install pandoc
+$ brew install --cask rstudio
+$ R
+> install.packages("rmarkdown")
+> install.packages("officedown")
+> install.packages('tinytex')
+> tinytex::install_tinytex()
+> Save workspace image? [y/n/c]: n
+$ exit
 ```
 
-## 📖 Documentation
+## Reference
 
-- **v1.0 Documentation**: See `v1/README.md`
-- **v2.0 Documentation**: See `v2/README-v2.md`
-- **v2.0 Implementation Summary**: See `v2/IMPLEMENTATION_SUMMARY.md`
+The name `dc4u` is in reference to [Funny Valentine](https://jojo.fandom.com/wiki/Funny_Valentine)'s (ファニー・ヴァレンタイン) [Stand](https://jojo.fandom.com/wiki/Stand) of the same name, [Dirty Deeds Done Dirt Cheap](https://jojo.fandom.com/wiki/Dirty_Deeds_Done_Dirt_Cheap) *(often shortened to D4C)* in [Part 7: Steel Ball Run](https://jojo.fandom.com/wiki/Steel_Ball_Run) of the ongoing manga series [JoJo's Bizarre Adventure](https://jojowiki.com/JoJo_Wiki).
 
-## 🔄 Migration Guide
-
-### From v1.0 to v2.0
-
-1. **Backward Compatibility**: All v1.0 `.dc` files work with v2.0
-2. **Enhanced Syntax**: v2.0 supports additional features
-3. **Better CLI**: v2.0 has comprehensive command-line interface
-4. **No R Dependencies**: v2.0 uses native Perl modules
-
-### Key Differences
-
-| Feature | v1.0 | v2.0 |
-|---------|------|------|
-| **Language** | Python | Perl |
-| **Architecture** | Monolithic | Modular |
-| **CLI** | Interactive only | Full CLI + batch |
-| **Templates** | Hardcoded | Flexible system |
-| **Dependencies** | R, Pandoc | Perl modules |
-| **Configuration** | None | YAML config |
-
-## 🎯 Which Version to Use?
-
-### Use **DC4U v2.0** if you want:
-- ✅ Modern, modular architecture
-- ✅ Comprehensive CLI interface
-- ✅ Flexible template system
-- ✅ Better error handling
-- ✅ No external dependencies
-- ✅ Batch processing
-- ✅ Configuration management
-
-### Use **DC4U v1.0** if you:
-- 🔄 Need to maintain existing Python workflows
-- 🔄 Have R/Pandoc infrastructure already set up
-- 🔄 Prefer the original interactive interface
-
-## 📋 Installation Requirements
-
-### DC4U v2.0 Requirements
-```bash
-# Ubuntu/Debian
-sudo apt-get install perl libyaml-tiny-perl
-sudo cpan PDF::API2
-
-# CentOS/RHEL
-sudo yum install perl perl-YAML-Tiny
-sudo cpan PDF::API2
-```
-
-### DC4U v1.0 Requirements
-```bash
-# Ubuntu/Debian
-sudo apt-get install python3 r-base pandoc
-sudo R -e "install.packages(c('rmarkdown', 'officedown', 'tinytex'))"
-
-# macOS
-brew install python r pandoc
-```
-
-## 🤝 Contributing
-
-1. **For v2.0**: Work in the `v2/` directory
-2. **For v1.0**: Work in the `v1/` directory
-3. **Documentation**: Update the respective README files
-4. **Testing**: Use the appropriate Makefile commands
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
-## 🆘 Support
-
-- **v2.0 Issues**: Create issues for v2.0 features
-- **v1.0 Issues**: Legacy support only
-- **Documentation**: Check the respective version directories
-
----
-
-**DC4U** - Making legal document generation efficient and reliable across multiple versions! 🚀
+<div align="center">
+    <img src="./asset/logo/d4c.png" width="35%">
+</div>
