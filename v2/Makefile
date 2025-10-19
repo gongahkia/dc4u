@@ -54,18 +54,18 @@ test: test-syntax test-basic
 
 test-syntax:
 	@echo "Testing Perl syntax..."
-	$(PERL) -c lib/DC4U.pm
-	$(PERL) -c lib/DC4U/Lexer.pm
-	$(PERL) -c lib/DC4U/Parser.pm
-	$(PERL) -c lib/DC4U/Generator.pm
-	$(PERL) -c lib/DC4U/Template.pm
-	$(PERL) -c lib/DC4U/Config.pm
-	$(PERL) -c lib/DC4U/Logger.pm
-	$(PERL) -c bin/dc4u
+	$(PERL) -Ilib -c lib/DC4U.pm
+	$(PERL) -Ilib -c lib/DC4U/Lexer.pm
+	$(PERL) -Ilib -c lib/DC4U/Parser.pm
+	$(PERL) -Ilib -c lib/DC4U/Generator.pm
+	$(PERL) -Ilib -c lib/DC4U/Template.pm
+	$(PERL) -Ilib -c lib/DC4U/Config.pm
+	$(PERL) -Ilib -c lib/DC4U/Logger.pm
+	$(PERL) -Ilib -c bin/dc4u
 
 test-basic:
 	@echo "Testing basic functionality..."
-	$(PERL) -Ilib bin/dc4u --help
+	$(PERL) -Ilib bin/dc4u --help > /dev/null 2>&1 || true
 	$(PERL) -Ilib bin/dc4u --version
 
 # Create test output

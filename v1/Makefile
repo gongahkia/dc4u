@@ -25,7 +25,10 @@ run:
 # Test the installation
 test:
 	@echo "Testing DC4U v1.0..."
-	$(PYTHON) -c "import src.main; print('DC4U v1.0 syntax OK')"
+	$(PYTHON) -m py_compile src/main.py
+	$(PYTHON) -m py_compile src/lexer.py
+	$(PYTHON) -m py_compile src/interpreter.py
+	@echo "DC4U v1.0 syntax OK"
 
 # Clean up
 clean:

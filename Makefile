@@ -1,95 +1,71 @@
-# DC4U Makefile
-# Version 2.0.0
+# DC4U Multi-Version Makefile
+# Root makefile for navigating between versions
 
-PERL = perl
-INSTALL_DIR = /usr/local
-BIN_DIR = $(INSTALL_DIR)/bin
-LIB_DIR = $(INSTALL_DIR)/lib/perl5
-CONFIG_DIR = /etc/dc4u
-TEMPLATE_DIR = /usr/share/dc4u/templates
+.PHONY: help v1 v2 test clean
 
 # Default target
-all: test
-
-# Install DC4U
-install: install-lib install-bin install-config install-templates
-
-install-lib:
-	@echo "Installing Perl modules..."
-	mkdir -p $(LIB_DIR)/DC4U
-	cp lib/DC4U.pm $(LIB_DIR)/
-	cp lib/DC4U/*.pm $(LIB_DIR)/DC4U/
-	chmod 644 $(LIB_DIR)/DC4U.pm
-	chmod 644 $(LIB_DIR)/DC4U/*.pm
-
-install-bin:
-	@echo "Installing binary..."
-	mkdir -p $(BIN_DIR)
-	cp bin/dc4u $(BIN_DIR)/
-	chmod 755 $(BIN_DIR)/dc4u
-
-install-config:
-	@echo "Installing configuration..."
-	mkdir -p $(CONFIG_DIR)
-	cp config/dc4u.yaml $(CONFIG_DIR)/
-	chmod 644 $(CONFIG_DIR)/dc4u.yaml
-
-install-templates:
-	@echo "Installing templates..."
-	mkdir -p $(TEMPLATE_DIR)
-	cp -r templates/* $(TEMPLATE_DIR)/
-	chmod -R 644 $(TEMPLATE_DIR)/*
-
-# Uninstall DC4U
-uninstall:
-	@echo "Uninstalling DC4U..."
-	rm -f $(BIN_DIR)/dc4u
-	rm -f $(LIB_DIR)/DC4U.pm
-	rm -rf $(LIB_DIR)/DC4U
-	rm -rf $(CONFIG_DIR)
-	rm -rf $(TEMPLATE_DIR)
-
-# Test the installation
-test: test-syntax test-basic
-
-test-syntax:
-	@echo "Testing Perl syntax..."
-	$(PERL) -c lib/DC4U.pm
-	$(PERL) -c lib/DC4U/Lexer.pm
-	$(PERL) -c lib/DC4U/Parser.pm
-	$(PERL) -c lib/DC4U/Generator.pm
-	$(PERL) -c lib/DC4U/Template.pm
-	$(PERL) -c lib/DC4U/Config.pm
-	$(PERL) -c lib/DC4U/Logger.pm
-	$(PERL) -c bin/dc4u
-
-test-basic:
-	@echo "Testing basic functionality..."
-	$(PERL) -Ilib bin/dc4u --help
-	$(PERL) -Ilib bin/dc4u --version
-
-# Create test output
-test-output:
-	@echo "Creating test output..."
-	mkdir -p test_output
-	$(PERL) -Ilib bin/dc4u --format HTML --output test_output/test.html samples/sample.dc
-	$(PERL) -Ilib bin/dc4u --format TXT --output test_output/test.txt samples/sample.dc
-	$(PERL) -Ilib bin/dc4u --format MD --output test_output/test.md samples/sample.dc
-
-# Clean up
-clean:
-	@echo "Cleaning up..."
-	rm -rf test_output
-	rm -f *.tmp
-
-# Show help
 help:
-	@echo "DC4U Makefile Commands:"
-	@echo "  make install     - Install DC4U system-wide"
-	@echo "  make uninstall   - Remove DC4U from system"
-	@echo "  make test        - Run syntax and basic tests"
-	@echo "  make test-output - Generate test output files"
-	@echo "  make clean       - Clean up temporary files"
-	@echo "  make help        - Show this help"
+	@echo "DC4U Multi-Version Repository"
+	@echo "============================="
+	@echo ""
+	@echo "Available commands:"
+	@echo "  make v1        - Work with DC4U v1.0 (Python)"
+	@echo "  make v2        - Work with DC4U v2.0 (Perl)"
+	@echo "  make test      - Test both versions"
+	@echo "  make clean     - Clean up temporary files"
+	@echo "  make help      - Show this help"
+	@echo ""
+	@echo "Version-specific commands:"
+	@echo "  make v1-install    - Install DC4U v1.0"
+	@echo "  make v1-test       - Test DC4U v1.0"
+	@echo "  make v2-install    - Install DC4U v2.0"
+	@echo "  make v2-test       - Test DC4U v2.0"
+	@echo ""
+	@echo "Documentation:"
+	@echo "  v1/README.md       - DC4U v1.0 documentation"
+	@echo "  v2/README-v2.md    - DC4U v2.0 documentation"
 
-.PHONY: all install uninstall test test-syntax test-basic test-output clean help
+# Navigate to v1 directory
+v1:
+	@echo "Switching to DC4U v1.0 (Python)..."
+	@echo "Run 'make help' in the v1/ directory for v1.0 commands"
+	@cd v1 && make help
+
+# Navigate to v2 directory  
+v2:
+	@echo "Switching to DC4U v2.0 (Perl)..."
+	@echo "Run 'make help' in the v2/ directory for v2.0 commands"
+	@cd v2 && make help
+
+# Test both versions
+test:
+	@echo "Testing DC4U v1.0..."
+	@cd v1 && make test
+	@echo ""
+	@echo "Testing DC4U v2.0..."
+	@cd v2 && make test
+
+# Clean up temporary files
+clean:
+	@echo "Cleaning up temporary files..."
+	@cd v1 && make clean
+	@cd v2 && make clean
+	@rm -f *.tmp *.temp
+
+# Version-specific installs
+v1-install:
+	@echo "Installing DC4U v1.0..."
+	@cd v1 && make install
+
+v2-install:
+	@echo "Installing DC4U v2.0..."
+	@cd v2 && make install
+
+# Version-specific tests
+v1-test:
+	@echo "Testing DC4U v1.0..."
+	@cd v1 && make test
+
+v2-test:
+	@echo "Testing DC4U v2.0..."
+	@cd v2 && make test
