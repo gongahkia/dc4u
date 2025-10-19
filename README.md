@@ -18,6 +18,10 @@ This format is intended to allow for quick integration with existing workflows w
 * `DC4U` transpiler takes in a simple reworked markup format and transpiles to multiple targets
 * Afraid you won't remember `.dc` language syntax? The `DC4U` transpiler will *kindly* point out the error and correct you accordingly.
 
+## Stack
+
+...
+
 ## Output formats
 
 | Output format | Purpose | Implementation status |
@@ -84,3 +88,11 @@ $ R
 > Save workspace image? [y/n/c]: n
 $ exit
 ```
+
+## Reference
+
+The name `dc4u` is in reference to [Funny Valentine](https://jojo.fandom.com/wiki/Funny_Valentine)'s (ファニー・ヴァレンタイン) [Stand](https://jojo.fandom.com/wiki/Stand) of the same name, [Dirty Deeds Done Dirt Cheap](https://jojo.fandom.com/wiki/Dirty_Deeds_Done_Dirt_Cheap) *(often shortened to D4C)* in [Part 7: Steel Ball Run](https://jojo.fandom.com/wiki/Steel_Ball_Run) of the ongoing manga series [JoJo's Bizarre Adventure](https://jojowiki.com/JoJo_Wiki).
+
+<div align="center">
+    <img src="./asset/logo/d4c.png" width="35%">
+</div>
