@@ -1,6 +1,7 @@
-![Static Badge](https://img.shields.io/badge/DC4U_1.0-passing-green)
+[![Static Badge](https://img.shields.io/badge/DC4U_1.0.0-passing-green)](https://github.com/gongahkia/dc4u/releases/tag/1.0.0)
+[![Static Badge](https://img.shields.io/badge/DC4U_2.0.0-passing-dark_green)](https://github.com/gongahkia/dc4u/releases/tag/2.0.0)
 
-# Draft Charges 4 U
+# `Draft Charges 4 U`
 
 A Legal Draft Charge Creator.
 
@@ -182,7 +183,7 @@ C4Container
     Rel(generator, txt_out, "Creates", "Text documents")
     Rel(generator, docx_out, "Creates", "Word documents")
     
-    UpdateLayoutConfig($c4ShapeInRow="4", $c4BoundaryInRow="3")
+    UpdateLayoutConfig($c4ShapeInRow="2", $c4BoundaryInRow="1")
 ```
 
 ## Reference
