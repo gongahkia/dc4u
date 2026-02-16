@@ -42,13 +42,40 @@ sub new {
                 sections => 'SECTIONS 123-125'
             },
             
-            # UK-specific settings (for future use)
+            # UK-specific settings
             uk => {
                 court_name => 'Magistrates Court',
                 legal_act => 'Criminal Justice Act 2003',
                 act_chapter => 'CHAPTER 44',
                 act_edition => 'REVISED EDITION 2020',
                 sections => 'SECTIONS 1-10'
+            },
+            
+            # Australia defaults
+            australia => {
+                court_name => 'Local Court of New South Wales',
+                legal_act => 'Crimes Act 1900 (NSW)',
+                act_chapter => 'Act 40 of 1900',
+                act_edition => 'Consolidated',
+                sections => 'Section 117'
+            },
+            
+            # India defaults
+            india => {
+                court_name => 'District Court',
+                legal_act => 'Indian Penal Code 1860',
+                act_chapter => 'Chapter XVII',
+                act_edition => '1860 Act',
+                sections => 'Section 379'
+            },
+            
+            # Malaysia defaults
+            malaysia => {
+                court_name => 'Mahkamah Majistret',
+                legal_act => 'Penal Code (Act 574)',
+                act_chapter => 'Chapter XVII',
+                act_edition => 'Revised 1976',
+                sections => 'Section 379'
             }
         }
     };
