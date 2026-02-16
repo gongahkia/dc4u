@@ -36,6 +36,24 @@ sub new {
             statute => [qw/text/],
             officer => [qw/name role_division date/],
         },
+        australia => {
+            suspect => [qw/name dob address/],
+            charge  => [qw/title date explanation/],
+            statute => [qw/text/],
+            officer => [qw/name role_division date/],
+        },
+        india => {
+            suspect => [qw/name dob address/],
+            charge  => [qw/title date explanation/],
+            statute => [qw/text/],
+            officer => [qw/name role_division date/],
+        },
+        malaysia => {
+            suspect => [qw/name nric race age gender nationality/],
+            charge  => [qw/title date explanation/],
+            statute => [qw/text/],
+            officer => [qw/name role_division date/],
+        },
     };
     my $self = {
         jurisdiction    => $jurisdiction,
@@ -121,7 +139,7 @@ sub parse {
         elsif ($type eq 'R_SUSPECT_INFO') {
             if (@stack && $stack[-1] eq 'SUSPECT_INFO') {
                 pop @stack;
-                if ($self->{jurisdiction} eq 'uk') {
+                if ($self->{jurisdiction} =~ /^(uk|australia|india)$/) {
                     $result->{suspect_info} = $self->_parse_suspect_info_uk($current_content);
                 } else {
                     $result->{suspect_info} = $self->_parse_suspect_info($current_content);
@@ -139,7 +157,7 @@ sub parse {
         elsif ($type eq 'R_CHARGE_INFO') {
             if (@stack && $stack[-1] eq 'CHARGE_INFO') {
                 pop @stack;
-                if ($self->{jurisdiction} eq 'uk') {
+                if ($self->{jurisdiction} =~ /^(uk|australia|india)$/) {
                     $result->{charge_info} = $self->_parse_charge_info_uk($current_content);
                 } else {
                     $result->{charge_info} = $self->_parse_charge_info($current_content);
@@ -173,7 +191,7 @@ sub parse {
         elsif ($type eq 'R_CHARGING_OFFICER_INFO') {
             if (@stack && $stack[-1] eq 'OFFICER_INFO') {
                 pop @stack;
-                if ($self->{jurisdiction} eq 'uk') {
+                if ($self->{jurisdiction} =~ /^(uk|australia|india)$/) {
                     $result->{officer_info} = $self->_parse_officer_info_uk($current_content);
                 } else {
                     $result->{officer_info} = $self->_parse_officer_info($current_content);
