@@ -77,21 +77,25 @@ Returns selected file path or undef on quit.
 sub run {
     my ($self, $win) = @_;
     return undef unless @{$self->{files}};
-    my $visible = $self->{bottom} - $self->{top} - 1; # leave room for column header
+    my $visible = $self->{bottom} - $self->{top} - 1;
     while (1) {
+        erase();
         $self->_draw($win, $visible);
         my $ch = getch();
+        next unless defined $ch;
         if ($ch eq 'q' || $ch eq 'Q') {
             return undef;
-        } elsif ($ch == KEY_UP || $ch eq 'k') {
+        }
+        my $code = (length($ch) == 1) ? ord($ch) : $ch;
+        if ($code == KEY_UP || $ch eq 'k') {
             $self->{cursor}-- if $self->{cursor} > 0;
             $self->{scroll}-- if $self->{cursor} < $self->{scroll};
-        } elsif ($ch == KEY_DOWN || $ch eq 'j') {
+        } elsif ($code == KEY_DOWN || $ch eq 'j') {
             if ($self->{cursor} < $#{$self->{files}}) {
                 $self->{cursor}++;
                 $self->{scroll}++ if $self->{cursor} >= $self->{scroll} + $visible;
             }
-        } elsif ($ch == 10 || $ch == KEY_ENTER || $ch == 13) { # enter
+        } elsif ($code == 10 || $code == 13 || $code == KEY_ENTER) {
             return $self->{files}[$self->{cursor}]{path};
         }
     }
