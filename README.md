@@ -9,7 +9,7 @@ A Legal Draft Charge Creator.
 
 ## Motivation
 
-[Draft charges](https://mustsharenews.com/wp-content/uploads/2018/12/TOC-Charge-Sheet.jpg) are inane to format. `DC4U` simplifies the entire process of creating Draft Charges, by transpiling a human-readable markup format (`.dc`) to multiple targets outputs for viewing and distribution.
+[Draft charges](https://mustsharenews.com/wp-content/uploads/2018/12/TOC-Charge-Sheet.jpg) are inane to format. `DC4U` simplifies the entire process of creating Draft Charges, by transpiling a human-readable markup format (`.dc`) to [multiple targets outputs](#output-formats) for viewing and distribution.
 
 ## Purpose
 
@@ -28,31 +28,6 @@ A Legal Draft Charge Creator.
 * *Configuration*: [YAML](https://yaml.org/) (v2.0)
 * *Build System*: [Make](https://www.gnu.org/software/make/) (v1.0 & v2.0)
 * *Testing*: [Perl Test Framework](https://perldoc.perl.org/perlunitut) (v2.0)
-
-## Output formats
-
-| Output format | Purpose | Implementation status |
-| :---: | :---: | :---: |
-| `.txt` | Universal viewing and plain text output | ![](https://img.shields.io/badge/build-up-darkgreen) |
-| `.md` | Markdown formatted viewing with HTML styling | ![](https://img.shields.io/badge/build-up-darkgreen)|
-| `.html` | Web-ready documents with CSS styling | ![](https://img.shields.io/badge/build-up-darkgreen) |
-| `.rmd` | R Markdown for data visualization and analysis | ![](https://img.shields.io/badge/build-up-darkgreen) |
-| `.pdf` | Professional documents via PDF::API2 (v2.0) or R/Pandoc (v1.0) | ![](https://img.shields.io/badge/build-up-darkgreen) |
-| `.docx` | Microsoft Word documents via RTF::Writer (v2.0) or R/officedown (v1.0) | ![](https://img.shields.io/badge/build-up-darkgreen)|
-
-## Language syntax
-
-Refer to [`samples/`](./samples/) for examples and expansion on `.dc` syntax.
-
-| **stylisation** | **syntax** | **notes** | **implementation status** |
-| :---: | :---: | :---: | :---: |
-| Output format | \` ` | PDF, HTML, TXT, MD, RMD, DOCX | ![](https://img.shields.io/badge/build-up-darkgreen) |
-| Suspect info | < > | Name; NRIC; Race; Age; Gender; Nationality | ![](https://img.shields.io/badge/build-up-darkgreen) |
-| Charge details | [ ] | Title; Date of offence; Explanation | ![](https://img.shields.io/badge/build-up-darkgreen)  |
-| Legal statute | @ @ | Relevant statute or legal provision | ![](https://img.shields.io/badge/build-up-darkgreen) |
-| Officer info | { } | Name; Role/Division; Date of charge | ![](https://img.shields.io/badge/build-up-darkgreen)  |
-| Comments | # # | Ignored in final output, for documentation | ![](https://img.shields.io/badge/build-up-darkgreen)  |
-| Separator | --- | Separates multiple charges in same file | ![](https://img.shields.io/badge/build-up-darkgreen)  |
 
 ## Screenshots
 
@@ -86,6 +61,17 @@ The below instructions are for using `DC4U` on your client machine.
 ## Architecture
 
 <img src="./assets/reference/architecture.png">
+
+## Output formats
+
+| Format | Purpose | Implementation status |
+| :---: | :---: | :---: |
+| `.txt` | Universal viewing and plain text output | ![](https://img.shields.io/badge/build-up-darkgreen) |
+| `.md` | Markdown formatted viewing with HTML styling | ![](https://img.shields.io/badge/build-up-darkgreen)|
+| `.html` | Web-ready documents with CSS styling | ![](https://img.shields.io/badge/build-up-darkgreen) |
+| `.rmd` | R Markdown for data visualization and analysis | ![](https://img.shields.io/badge/build-up-darkgreen) |
+| `.pdf` | Professional documents via PDF::API2 (v2.0) or R/Pandoc (v1.0) | ![](https://img.shields.io/badge/build-up-darkgreen) |
+| `.docx` | Microsoft Word documents via RTF::Writer (v2.0) or R/officedown (v1.0) | ![](https://img.shields.io/badge/build-up-darkgreen)|
 
 ## Reference
 
