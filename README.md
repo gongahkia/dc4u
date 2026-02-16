@@ -50,7 +50,7 @@ A Legal Draft Charge Creator.
 
 ### Eg. Draft Charge created with `DC4U`
 
-![](asset/reference/draft-charge-eg.png)
+<img src="asset/reference/draft-charge-eg.png" width="75%">
 
 ## Usage
 
