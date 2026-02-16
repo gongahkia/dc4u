@@ -19,6 +19,7 @@ use DC4U::TUI::Preview;
 use DC4U::TUI::ErrorDisplay;
 use DC4U::TUI::ChargeNav;
 use DC4U::TUI::LogViewer;
+use DC4U::TUI::DirBrowser;
 
 =head1 NAME
 
@@ -275,13 +276,26 @@ sub _main_flow {
     my $confirmed = $pv->show($self->{screen}, $selected_result);
     unless ($confirmed) { $log->info('User cancelled write at Preview'); return; }
 
-    # step 6: write to disk
-    my $ext = lc($format);
-    $ext = 'Rmd' if $ext eq 'rmd';
+    # step 6: select output directory
+    $log->info('Screen: DirBrowser (Output)');
+    $self->_draw_header('DC4U - Select Output Directory');
+    $self->_draw_status('Navigate/Enter to change dir, Space/s to select current as destination');
+    refresh();
 
     require File::Basename;
     my ($name, $path, $suffix) = File::Basename::fileparse($file, qr/\.[^.]*$/);
-    my $outfile = "${path}${name}.${ext}";
+    
+    my $db = DC4U::TUI::DirBrowser->new(
+        top => $top, bottom => $bot, width => $w,
+        start_dir => $path,
+    );
+    my $out_dir = $db->run($self->{screen});
+    unless ($out_dir) { $log->info('User quit at DirBrowser'); return; }
+
+    # step 7: write to disk
+    my $ext = lc($format);
+    $ext = 'Rmd' if $ext eq 'rmd';
+    my $outfile = "${out_dir}/${name}.${ext}";
 
     $log->info("Writing output to: $outfile");
     eval {
