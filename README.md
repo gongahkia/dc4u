@@ -74,6 +74,17 @@ $ make tui
 $ dc4u -f PDF samples/v2/singapore_assault.dc
 ```
 
+## Output formats
+
+| Format | Purpose | Implementation status |
+| :---: | :---: | :---: |
+| `.txt` | Universal viewing and plain text output | ![](https://img.shields.io/badge/build-up-darkgreen) |
+| `.md` | Markdown formatted viewing with HTML styling | ![](https://img.shields.io/badge/build-up-darkgreen)|
+| `.html` | Web-ready documents with CSS styling | ![](https://img.shields.io/badge/build-up-darkgreen) |
+| `.rmd` | R Markdown for data visualization and analysis | ![](https://img.shields.io/badge/build-up-darkgreen) |
+| `.pdf` | Professional documents via PDF::API2 (v2.0) or R/Pandoc (v1.0) | ![](https://img.shields.io/badge/build-up-darkgreen) |
+| `.docx` | Microsoft Word documents via RTF::Writer (v2.0) or R/officedown (v1.0) | ![](https://img.shields.io/badge/build-up-darkgreen)|
+
 ## Architecture
 
 ```mermaid
@@ -102,17 +113,6 @@ graph TD
     L --> C
     L --> D
 ```
-
-## Output formats
-
-| Format | Purpose | Implementation status |
-| :---: | :---: | :---: |
-| `.txt` | Universal viewing and plain text output | ![](https://img.shields.io/badge/build-up-darkgreen) |
-| `.md` | Markdown formatted viewing with HTML styling | ![](https://img.shields.io/badge/build-up-darkgreen)|
-| `.html` | Web-ready documents with CSS styling | ![](https://img.shields.io/badge/build-up-darkgreen) |
-| `.rmd` | R Markdown for data visualization and analysis | ![](https://img.shields.io/badge/build-up-darkgreen) |
-| `.pdf` | Professional documents via PDF::API2 (v2.0) or R/Pandoc (v1.0) | ![](https://img.shields.io/badge/build-up-darkgreen) |
-| `.docx` | Microsoft Word documents via RTF::Writer (v2.0) or R/officedown (v1.0) | ![](https://img.shields.io/badge/build-up-darkgreen)|
 
 ## Reference
 
