@@ -56,17 +56,19 @@ Refer to [`samples/`](./samples/) for examples and expansion on `.dc` syntax.
 | Comments | # # | Ignored in final output, for documentation | ![](https://img.shields.io/badge/build-up-darkgreen)  |
 | Separator | --- | Separates multiple charges in same file | ![](https://img.shields.io/badge/build-up-darkgreen)  |
 
-# Screenshots
+## Screenshots
 
 Example of a draft charge created with `DC4U`
 
 ![](assets/reference/draft-charge-eg.png)
 
-# Installation
+## Usage
+
+### Installation
 
 This installation also handles R markdown default toolchain's installation, as well as compilation targets to `.pdf` and `.docx`.
 
-## WSL (Debian)
+#### WSL (Debian)
 
 ```console
 $ git clone https://github.com/gongahkia/dc4u
@@ -82,7 +84,7 @@ $ sudo R
 $ exit
 ```
 
-## OSX
+#### OSX
 
 ```console
 $ git clone https://github.com/gongahkia/dc4u
