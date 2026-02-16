@@ -61,24 +61,24 @@ sub parse {
     my $current_section = '';
     my $current_content = '';
     
-    for my $i (0 .. $#$tokens) {
+    my $i = 0;
+    while ($i <= $#$tokens) {
         my $token = $tokens->[$i];
         my $type = $token->{type};
         my $value = $token->{value};
         
-        # Handle opening tokens
+        # handle opening tokens
         if ($type eq 'OUTPUT_FORMAT') {
             if ($result->{output_format}) {
-                # Skip this output format token since we already have one from command line
                 if ($i + 1 <= $#$tokens && $tokens->[$i + 1]->{type} eq 'WORD') {
-                    $i++; # Skip the format token
+                    $i++; # skip the format value token
                 }
+                $i++;
                 next;
             }
-            # Get next token as format
             if ($i + 1 <= $#$tokens && $tokens->[$i + 1]->{type} eq 'WORD') {
                 $result->{output_format} = $tokens->[$i + 1]->{value};
-                $i++; # Skip the format token
+                $i++; # skip the format value token
             } else {
                 return { error => "Output format not specified after ` at line " . $token->{line} };
             }
@@ -113,15 +113,14 @@ sub parse {
         }
         elsif ($type eq 'STATUTE_INFO') {
             if ($result->{statute_info}) {
-                # Skip this statute token since we already have one
+                $i++;
                 next;
             }
-            # Get content until next @
             my $statute_content = '';
             for my $j ($i + 1 .. $#$tokens) {
                 if ($tokens->[$j]->{type} eq 'STATUTE_INFO') {
                     $result->{statute_info} = $statute_content;
-                    $i = $j; # Skip to the closing @
+                    $i = $j; # skip to closing @
                     last;
                 } else {
                     $statute_content .= $tokens->[$j]->{value};
@@ -143,14 +142,14 @@ sub parse {
             }
         }
         elsif ($type eq 'COMMENT') {
-            # Handle comments (ignore content)
+            my $comment_content = '';
             for my $j ($i + 1 .. $#$tokens) {
                 if ($tokens->[$j]->{type} eq 'COMMENT') {
-                    push @{$result->{comments}}, $current_content;
-                    $i = $j;
+                    push @{$result->{comments}}, $comment_content;
+                    $i = $j; # skip to closing #
                     last;
                 } else {
-                    $current_content .= $tokens->[$j]->{value};
+                    $comment_content .= $tokens->[$j]->{value};
                 }
             }
         }
@@ -159,6 +158,7 @@ sub parse {
                 $current_content .= $value;
             }
         }
+        $i++;
     }
     
     # Validate required fields

@@ -64,8 +64,7 @@ sub _generate_pdf {
     # Use PDF::API2 for PDF generation
     eval { require PDF::API2; };
     if ($@) {
-        # Fallback to HTML with PDF conversion
-        return _generate_html($data, $config);
+        die "PDF::API2 required for PDF output. Install via: cpan PDF::API2";
     }
     
     my $pdf = PDF::API2->new();
