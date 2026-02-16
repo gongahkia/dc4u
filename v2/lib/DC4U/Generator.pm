@@ -66,20 +66,68 @@ sub _generate_pdf {
     if ($@) {
         die "PDF::API2 required for PDF output. Install via: cpan PDF::API2";
     }
-    
+
+    # read config
+    my $font_family = 'Times-Roman';
+    my $font_size   = 12;
+    my $margin_top  = 50;
+    my $margin_bot  = 50;
+    my $margin_left = 50;
+    my $margin_right = 50;
+    if ($config && $config->can('get')) {
+        $font_family = $config->get('formats.pdf.font_family') // $font_family;
+        $font_size   = $config->get('formats.pdf.font_size')   // $font_size;
+        my $margins  = $config->get('formats.pdf.margins');
+        if (ref $margins eq 'HASH') {
+            $margin_top   = $margins->{top}    // $margin_top;
+            $margin_bot   = $margins->{bottom} // $margin_bot;
+            $margin_left  = $margins->{left}   // $margin_left;
+            $margin_right = $margins->{right}  // $margin_right;
+        }
+    }
+
     my $pdf = PDF::API2->new();
+    my $font = $pdf->corefont($font_family);
+    my $font_bold = $pdf->corefont("$font_family-Bold") || $font;
+
+    my $page_w = 612; # letter
+    my $page_h = 792;
+    my $usable_w = $page_w - $margin_left - $margin_right;
+
     my $page = $pdf->page();
-    my $font = $pdf->corefont('Times-Roman');
-    
-    my $y = 750;
-    my $content = _build_charge_content($data);
-    
-    # Add content to PDF
+    $page->mediabox($page_w, $page_h);
     my $text = $page->text();
-    $text->font($font, 12);
-    $text->translate(50, $y);
-    $text->text($content);
-    
+    my $y = $page_h - $margin_top;
+
+    my $content = _build_charge_content($data);
+    # strip html to plain text lines
+    $content =~ s/<br\s*\/?>/\n/gi;
+    $content =~ s/<\/(?:p|div|h[1-6]|li|tr)>/\n/gi;
+    $content =~ s/<[^>]+>//g;
+    $content =~ s/&nbsp;/ /g;
+    $content =~ s/&amp;/&/g;
+    $content =~ s/&lt;/</g;
+    $content =~ s/&gt;/>/g;
+
+    my @lines = split /\n/, $content;
+
+    for my $line (@lines) {
+        # word-wrap
+        my @wrapped = _pdf_wrap($line, $font, $font_size, $usable_w);
+        for my $wline (@wrapped) {
+            if ($y < $margin_bot + $font_size) { # page break
+                $page = $pdf->page();
+                $page->mediabox($page_w, $page_h);
+                $text = $page->text();
+                $y = $page_h - $margin_top;
+            }
+            $text->font($font, $font_size);
+            $text->translate($margin_left, $y);
+            $text->text($wline);
+            $y -= $font_size * 1.4;
+        }
+    }
+
     return $pdf->stringify();
 }
 
