@@ -88,6 +88,24 @@ sub parse {
                 statute => [qw/text/],
                 officer => [qw/name role_division date/],
             },
+            australia => {
+                suspect => [qw/name dob address/],
+                charge  => [qw/title date explanation/],
+                statute => [qw/text/],
+                officer => [qw/name role_division date/],
+            },
+            india => {
+                suspect => [qw/name dob address/],
+                charge  => [qw/title date explanation/],
+                statute => [qw/text/],
+                officer => [qw/name role_division date/],
+            },
+            malaysia => {
+                suspect => [qw/name nric race age gender nationality/],
+                charge  => [qw/title date explanation/],
+                statute => [qw/text/],
+                officer => [qw/name role_division date/],
+            },
         };
         $self->{required_fields} = $required->{$self->{jurisdiction}} || $required->{singapore};
     }

@@ -60,75 +60,32 @@ Generates PDF document.
 
 sub _generate_pdf {
     my ($data, $config) = @_;
-    
-    # Use PDF::API2 for PDF generation
-    eval { require PDF::API2; };
-    if ($@) {
-        die "PDF::API2 required for PDF output. Install via: cpan PDF::API2";
+    my $html_content = _build_charge_content($data, $config);
+    my $full_html = "<html><body>\n$html_content\n</body></html>";
+    # pandoc HTML->PDF
+    my $pandoc_path = `which pandoc` || '/opt/homebrew/bin/pandoc';
+    chomp $pandoc_path;
+    unless (-x $pandoc_path) {
+        die "Error: pandoc not found. Install via: brew install pandoc";
     }
-
-    # read config
-    my $font_family = 'Times-Roman';
-    my $font_size   = 12;
-    my $margin_top  = 50;
-    my $margin_bot  = 50;
-    my $margin_left = 50;
-    my $margin_right = 50;
-    if ($config && $config->can('get')) {
-        $font_family = $config->get('formats.pdf.font_family') // $font_family;
-        $font_size   = $config->get('formats.pdf.font_size')   // $font_size;
-        my $margins  = $config->get('formats.pdf.margins');
-        if (ref $margins eq 'HASH') {
-            $margin_top   = $margins->{top}    // $margin_top;
-            $margin_bot   = $margins->{bottom} // $margin_bot;
-            $margin_left  = $margins->{left}   // $margin_left;
-            $margin_right = $margins->{right}  // $margin_right;
-        }
+    require File::Temp;
+    my ($fh_in, $in_file) = File::Temp::tempfile(SUFFIX => '.html', UNLINK => 1);
+    binmode $fh_in, ':encoding(UTF-8)';
+    print $fh_in $full_html;
+    close $fh_in;
+    my ($fh_out, $out_file) = File::Temp::tempfile(SUFFIX => '.pdf', UNLINK => 1);
+    close $fh_out;
+    my $cmd = "$pandoc_path -s \"$in_file\" -o \"$out_file\" 2>&1";
+    my $output = `$cmd`;
+    if ($? != 0) {
+        die "PDF generation failed (pandoc): $output";
     }
-
-    my $pdf = PDF::API2->new();
-    my $font = $pdf->corefont($font_family);
-    my $font_bold = $pdf->corefont("$font_family-Bold") || $font;
-
-    my $page_w = 612; # letter
-    my $page_h = 792;
-    my $usable_w = $page_w - $margin_left - $margin_right;
-
-    my $page = $pdf->page();
-    $page->mediabox($page_w, $page_h);
-    my $text = $page->text();
-    my $y = $page_h - $margin_top;
-
-    my $content = _build_charge_content($data, $config);
-    # strip html to plain text lines
-    $content =~ s/<br\s*\/?>/\n/gi;
-    $content =~ s/<\/(?:p|div|h[1-6]|li|tr)>/\n/gi;
-    $content =~ s/<[^>]+>//g;
-    $content =~ s/&nbsp;/ /g;
-    $content =~ s/&amp;/&/g;
-    $content =~ s/&lt;/</g;
-    $content =~ s/&gt;/>/g;
-
-    my @lines = split /\n/, $content;
-
-    for my $line (@lines) {
-        # word-wrap
-        my @wrapped = _pdf_wrap($line, $font, $font_size, $usable_w);
-        for my $wline (@wrapped) {
-            if ($y < $margin_bot + $font_size) { # page break
-                $page = $pdf->page();
-                $page->mediabox($page_w, $page_h);
-                $text = $page->text();
-                $y = $page_h - $margin_top;
-            }
-            $text->font($font, $font_size);
-            $text->translate($margin_left, $y);
-            $text->text($wline);
-            $y -= $font_size * 1.4;
-        }
-    }
-
-    return $pdf->stringify();
+    open my $pdf_fh, '<', $out_file or die "Cannot read generated PDF: $!";
+    binmode $pdf_fh;
+    local $/;
+    my $content = <$pdf_fh>;
+    close $pdf_fh;
+    return $content;
 }
 
 =head2 _generate_html
@@ -336,13 +293,13 @@ sub _build_charge_content {
     # use Template module if config provides jurisdiction
     if ($config && $config->can('get')) {
         my $jurisdiction = $config->get('jurisdiction') // 'singapore';
-        eval {
+        my $result = eval {
             require DC4U::Template;
             my $tmpl = DC4U::Template->new();
             my $template_name = "${jurisdiction}_charge";
-            return $tmpl->render($template_name, $data, 'HTML');
+            $tmpl->render($template_name, $data, 'HTML');
         };
-        # fall through to hardcoded on error
+        return $result if defined $result && !$@;
     }
 
     my $suspect = $data->{suspect_info};

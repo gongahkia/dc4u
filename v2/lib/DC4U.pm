@@ -86,20 +86,23 @@ sub process_dc_string {
     # Split content by separators
     my @charge_blocks = split /^---$/m, $content;
     
+    my $jurisdiction = $options->{jurisdiction} // $config->get('jurisdiction') // 'singapore';
+    $options->{jurisdiction} = $jurisdiction;
+    $config->set('jurisdiction', $jurisdiction);
     my @results;
-    
+
     for my $i (0 .. $#charge_blocks) {
         my $block = $charge_blocks[$i];
         next unless $block =~ /\S/; # Skip empty blocks
-        
+
         $logger->info("Processing charge block " . ($i + 1));
-        
+
         # Lex the content
         my $lexer = DC4U::Lexer->new();
         my $tokens = $lexer->tokenize($block);
-        
+
         # Parse the tokens
-        my $parser = DC4U::Parser->new();
+        my $parser = DC4U::Parser->new(jurisdiction => $options->{jurisdiction});
         my $parsed_data = $parser->parse($tokens, $options);
         
         if ($parsed_data->{error}) {

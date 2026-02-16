@@ -71,7 +71,7 @@ if ($version) {
 
 # validate jurisdiction if given
 if ($jurisdiction) {
-    my @valid_j = qw(singapore uk);
+    my @valid_j = qw(singapore uk australia india malaysia);
     unless (grep { $_ eq $jurisdiction } @valid_j) {
         print "Error: Invalid jurisdiction '$jurisdiction'. Valid: " . join(', ', @valid_j) . "\n";
         exit 1;
@@ -110,11 +110,9 @@ my $options = {
     config_file => $config_file,
 };
 
-# set jurisdiction in config if provided
+# set jurisdiction in options if provided
 if ($jurisdiction) {
-    require DC4U::Config;
-    my $cfg = DC4U::Config->new($config_file);
-    $cfg->set('jurisdiction', $jurisdiction);
+    $options->{jurisdiction} = $jurisdiction;
 }
 
 for my $input_file (@input_files) {
@@ -143,6 +141,7 @@ for my $input_file (@input_files) {
         if ($results && @$results > 0) {
             if (@$results == 1) {
                 open my $fh, '>', $output or die "Cannot write to $output: $!";
+                binmode $fh if $format =~ /^(PDF|DOCX)$/;
                 print $fh $results->[0]{output};
                 close $fh;
                 print "Generated: $output\n" unless $quiet;
@@ -161,6 +160,7 @@ for my $input_file (@input_files) {
                     for my $i (0 .. $#$results) {
                         my $cfile = "${path}${name}-charge-" . ($i + 1) . "${suffix}";
                         open my $fh, '>', $cfile or die "Cannot write to $cfile: $!";
+                        binmode $fh if $format =~ /^(PDF|DOCX)$/;
                         print $fh $results->[$i]{output};
                         close $fh;
                         print "Generated: $cfile\n" unless $quiet;
