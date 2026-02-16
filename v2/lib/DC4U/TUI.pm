@@ -10,6 +10,7 @@ use lib "$FindBin::Bin/../lib";
 
 use DC4U;
 use DC4U::Config;
+use DC4U::Logger;
 use DC4U::TUI::FileBrowser;
 use DC4U::TUI::FormatSelector;
 use DC4U::TUI::JurisdictionSelector;
@@ -32,9 +33,11 @@ Progress, Preview, ErrorDisplay, ChargeNav.
 
 sub new {
     my ($class, %opts) = @_;
+    my $log_file = $opts{log_file} || 'dc4u_tui.log';
     my $self = {
-        config => DC4U::Config->new($opts{config_file}),
-        screen => undef, # curses main window
+        config   => DC4U::Config->new($opts{config_file}),
+        logger   => DC4U::Logger->new('DEBUG', log_file => $log_file),
+        screen   => undef,
         header_h => 3,
         status_h => 2,
         running  => 1,
@@ -52,10 +55,12 @@ select file → jurisdiction → format → process → preview → confirm writ
 
 sub run {
     my $self = shift;
+    $self->{logger}->info('TUI session started');
     $self->_init_curses();
     eval { $self->_main_flow(); };
     my $err = $@;
     $self->_end_curses();
+    $self->{logger}->info('TUI session ended');
     die $err if $err;
 }
 
@@ -131,8 +136,10 @@ sub _clear_content {
 
 sub _main_flow {
     my $self = shift;
+    my $log = $self->{logger};
 
     # step 1: file browser
+    $log->info('Screen: FileBrowser');
     $self->_draw_header('DC4U — Select Input File');
     $self->_draw_status('Navigate with ↑↓, Enter to select, q to quit');
     refresh();
@@ -141,9 +148,11 @@ sub _main_flow {
         top => $top, bottom => $bot, width => $w
     );
     my $file = $fb->run($self->{screen});
-    return unless $file; # user quit
+    unless ($file) { $log->info('User quit at FileBrowser'); return; }
+    $log->info("File selected: $file");
 
     # step 2: jurisdiction selector
+    $log->info('Screen: JurisdictionSelector');
     $self->_clear_content();
     $self->_draw_header('DC4U — Select Jurisdiction');
     $self->_draw_status('Navigate with ↑↓, Enter to select');
@@ -153,10 +162,12 @@ sub _main_flow {
         config => $self->{config},
     );
     my $jurisdiction = $js->run($self->{screen});
-    return unless $jurisdiction;
+    unless ($jurisdiction) { $log->info('User quit at JurisdictionSelector'); return; }
+    $log->info("Jurisdiction selected: $jurisdiction");
     $self->{config}->set('jurisdiction', $jurisdiction);
 
     # step 3: format selector
+    $log->info('Screen: FormatSelector');
     $self->_clear_content();
     $self->_draw_header('DC4U — Select Output Format');
     $self->_draw_status('Navigate with ↑↓, Enter to select');
@@ -165,9 +176,11 @@ sub _main_flow {
         top => $top, bottom => $bot, width => $w
     );
     my $format = $fs->run($self->{screen});
-    return unless $format;
+    unless ($format) { $log->info('User quit at FormatSelector'); return; }
+    $log->info("Format selected: $format");
 
     # step 4: process with progress
+    $log->info("Processing file=$file format=$format jurisdiction=$jurisdiction");
     $self->_clear_content();
     $self->_draw_header('DC4U — Processing');
     $self->_draw_status('Processing...');
@@ -188,6 +201,7 @@ sub _main_flow {
     $pg->finish($self->{screen}, !$proc_err);
 
     if ($proc_err) {
+        $log->error("Processing error: $proc_err");
         $self->_clear_content();
         $self->_draw_header('DC4U — Error');
         $self->_draw_status('Press any key to exit');
@@ -200,6 +214,7 @@ sub _main_flow {
     }
 
     unless ($results && @$results > 0) {
+        $log->error('No output generated');
         $self->_clear_content();
         $self->_draw_header('DC4U — Error');
         $self->_draw_status('Press any key to exit');
@@ -211,9 +226,12 @@ sub _main_flow {
         return;
     }
 
+    $log->info('Processing complete, ' . scalar(@$results) . ' charge(s) generated');
+
     # step 5: preview (with charge nav if multiple charges)
     my $selected_result;
     if (@$results > 1) {
+        $log->info('Screen: ChargeNav (' . scalar(@$results) . ' charges)');
         $self->_clear_content();
         $self->_draw_header('DC4U — Charge Navigator');
         $self->_draw_status('Tab between charges, Enter to preview');
@@ -226,8 +244,9 @@ sub _main_flow {
     } else {
         $selected_result = $results->[0];
     }
-    return unless $selected_result;
+    unless ($selected_result) { $log->info('User quit at Preview/ChargeNav'); return; }
 
+    $log->info('Screen: Preview');
     $self->_clear_content();
     $self->_draw_header('DC4U — Preview');
     $self->_draw_status('Enter to confirm write, q to cancel');
@@ -236,21 +255,17 @@ sub _main_flow {
         top => $top, bottom => $bot, width => $w
     );
     my $confirmed = $pv->show($self->{screen}, $selected_result);
-    return unless $confirmed;
+    unless ($confirmed) { $log->info('User cancelled write at Preview'); return; }
 
     # step 6: write to disk
     my $ext = lc($format);
-    $ext = 'html' if $ext eq 'html';
-    $ext = 'txt'  if $ext eq 'txt';
-    $ext = 'md'   if $ext eq 'md';
-    $ext = 'Rmd'  if $ext eq 'rmd';
-    $ext = 'docx' if $ext eq 'docx';
-    $ext = 'pdf'  if $ext eq 'pdf';
+    $ext = 'Rmd' if $ext eq 'rmd';
 
     require File::Basename;
     my ($name, $path, $suffix) = File::Basename::fileparse($file, qr/\.[^.]*$/);
     my $outfile = "${path}${name}.${ext}";
 
+    $log->info("Writing output to: $outfile");
     eval {
         open my $fh, '>', $outfile or die "Cannot write $outfile: $!";
         if (ref $selected_result eq 'HASH') {
@@ -261,6 +276,7 @@ sub _main_flow {
         close $fh;
     };
     if ($@) {
+        $log->error("Write error: $@");
         $self->_clear_content();
         $self->_draw_header('DC4U — Write Error');
         $self->_draw_status('Press any key');
@@ -272,6 +288,7 @@ sub _main_flow {
         return;
     }
 
+    $log->info("File written successfully: $outfile");
     $self->_clear_content();
     $self->_draw_header('DC4U — Complete');
     $self->_draw_status('Press any key to exit');

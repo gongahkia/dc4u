@@ -21,7 +21,7 @@ Provides logging functionality for DC4U with different log levels.
 =cut
 
 sub new {
-    my ($class, $level) = @_;
+    my ($class, $level, %opts) = @_;
     my $self = {
         level => $level || 'INFO',
         levels => {
@@ -30,8 +30,16 @@ sub new {
             'WARN'  => 2,
             'ERROR' => 3,
             'FATAL' => 4
-        }
+        },
+        log_file => $opts{log_file},
+        fh       => undef,
     };
+    if ($self->{log_file}) {
+        open my $fh, '>>', $self->{log_file}
+            or die "Cannot open log file $self->{log_file}: $!";
+        $fh->autoflush(1);
+        $self->{fh} = $fh;
+    }
     bless $self, $class;
     return $self;
 }
@@ -93,7 +101,7 @@ sub fatal {
 
 =head2 _log
 
-Internal logging method.
+Internal logging method. Writes to log_file if set, else STDERR.
 
 =cut
 
@@ -105,7 +113,11 @@ sub _log {
     my $timestamp = localtime();
     my $log_entry = "[$timestamp] [$level] $message\n";
     
-    print STDERR $log_entry;
+    if ($self->{fh}) {
+        print { $self->{fh} } $log_entry;
+    } else {
+        print STDERR $log_entry;
+    }
 }
 
 1;
