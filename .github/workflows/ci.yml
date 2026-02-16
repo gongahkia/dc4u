@@ -1,4 +1,4 @@
-name: CI
+name: DC4U CI/CD on push
 
 on:
   push:
