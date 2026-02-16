@@ -18,6 +18,7 @@ use DC4U::TUI::Progress;
 use DC4U::TUI::Preview;
 use DC4U::TUI::ErrorDisplay;
 use DC4U::TUI::ChargeNav;
+use DC4U::TUI::LogViewer;
 
 =head1 NAME
 
@@ -138,17 +139,34 @@ sub _main_flow {
     my $self = shift;
     my $log = $self->{logger};
 
-    # step 1: file browser
-    $log->info('Screen: FileBrowser');
-    $self->_draw_header('DC4U — Select Input File');
-    $self->_draw_status('Navigate with ↑↓, Enter to select, q to quit');
-    refresh();
+    # step 1: file browser (loops back if user opens log viewer)
     my ($top, $bot, $w) = $self->_content_region();
-    my $fb = DC4U::TUI::FileBrowser->new(
-        top => $top, bottom => $bot, width => $w
-    );
-    my $file = $fb->run($self->{screen});
-    unless ($file) { $log->info('User quit at FileBrowser'); return; }
+    my $file;
+    while (1) {
+        $log->info('Screen: FileBrowser');
+        $self->_draw_header('DC4U \x{2014} Select Input File');
+        $self->_draw_status('\x{2191}\x{2193}=navigate  Enter=select  l=view logs  q=quit');
+        refresh();
+        my $fb = DC4U::TUI::FileBrowser->new(
+            top => $top, bottom => $bot, width => $w
+        );
+        $file = $fb->run($self->{screen});
+        unless ($file) { $log->info('User quit at FileBrowser'); return; }
+        if ($file eq '__VIEW_LOGS__') {
+            $log->info('User opened LogViewer');
+            erase();
+            $self->_draw_header('DC4U \x{2014} Session Logs');
+            $self->_draw_status('\x{2191}\x{2193}=scroll  g/G=top/bottom  r=reload  q=back');
+            refresh();
+            my $lv = DC4U::TUI::LogViewer->new(
+                top => $top, bottom => $bot, width => $w,
+                log_file => $self->{logger}->{log_file} // 'dc4u_tui.log',
+            );
+            $lv->run($self->{screen});
+            next; # loop back to file browser
+        }
+        last; # valid file selected
+    }
     $log->info("File selected: $file");
 
     # step 2: jurisdiction selector
