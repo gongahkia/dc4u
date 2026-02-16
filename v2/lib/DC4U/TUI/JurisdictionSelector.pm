@@ -59,6 +59,15 @@ sub run {
 sub _draw {
     my ($self, $win) = @_;
     my $w = $self->{width};
+    my $h = getmaxy($win);
+
+    # title bar
+    attron(COLOR_PAIR(1) | A_BOLD);
+    for my $r (0..2) { move($r, 0); addstr(' ' x $w); }
+    my $title = 'DC4U - Select Jurisdiction';
+    move(1, int(($w - length($title)) / 2)); addstr($title);
+    attroff(COLOR_PAIR(1) | A_BOLD);
+
     # jurisdiction list
     for my $i (0 .. $#JURISDICTIONS) {
         my $y = $self->{top} + $i;
@@ -66,8 +75,8 @@ sub _draw {
         clrtoeol();
         my $j = $JURISDICTIONS[$i];
         my $sel = ($i == $self->{cursor});
-        my $radio = $sel ? '(●)' : '( )';
-        my $line = sprintf("  %s  %-20s — %s", $radio, $j->{label}, $j->{desc});
+        my $radio = $sel ? '(*)' : '( )';
+        my $line = sprintf("  %s  %-20s - %s", $radio, $j->{label}, $j->{desc});
         if ($sel) {
             attron(A_REVERSE);
             addstr(substr($line, 0, $w));
@@ -99,6 +108,14 @@ sub _draw {
             move($r, 0); clrtoeol();
         }
     }
+
+    # help bar
+    attron(COLOR_PAIR(1));
+    move($h - 2, 0); addstr(' ' x $w);
+    move($h - 1, 0); addstr(' ' x $w);
+    move($h - 2, 0); addstr(' Up/Down=navigate  Enter=select jurisdiction  q=back');
+    attroff(COLOR_PAIR(1));
+
     refresh();
 }
 
