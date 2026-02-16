@@ -5,6 +5,7 @@ use warnings;
 use v5.32;
 use Curses;
 use Cwd qw(getcwd);
+use File::Find qw(find);
 
 =head1 NAME
 
@@ -31,26 +32,13 @@ sub _scan_files {
     my $self = shift;
     my $cwd = getcwd();
     my @dc_files;
-    opendir(my $dh, $cwd) or return;
-    while (my $entry = readdir($dh)) {
-        next if $entry =~ /^\./;
-        push @dc_files, $entry if $entry =~ /\.dc$/i && -f "$cwd/$entry";
-    }
-    closedir($dh);
-    # also recurse one level into subdirs
-    opendir($dh, $cwd) or return;
-    while (my $entry = readdir($dh)) {
-        next if $entry =~ /^\./;
-        my $path = "$cwd/$entry";
-        next unless -d $path;
-        opendir(my $sdh, $path) or next;
-        while (my $sub = readdir($sdh)) {
-            next if $sub =~ /^\./;
-            push @dc_files, "$entry/$sub" if $sub =~ /\.dc$/i && -f "$path/$sub";
-        }
-        closedir($sdh);
-    }
-    closedir($dh);
+    find(sub {
+        return unless -f $_ && /\.dc$/i;
+        return if $File::Find::dir =~ /\/\./; # skip hidden dirs
+        my $rel = $File::Find::name;
+        $rel =~ s/^\Q$cwd\E\///;
+        push @dc_files, $rel;
+    }, $cwd);
     @dc_files = sort @dc_files;
     my @file_info;
     for my $f (@dc_files) {
