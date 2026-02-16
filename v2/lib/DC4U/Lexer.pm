@@ -44,10 +44,11 @@ sub new {
             ['R_CHARGING_OFFICER_INFO', qr/\}/],
             
             # Comments
-            ['COMMENT', qr/#/],
+            # Comments
+            ['COMMENT', qr/#[^\n]*/],
             
             # Enhanced word pattern for v2.0
-            ['WORD', qr/[A-Za-z0-9;,.?$!%-+*_\/()\s]+/],
+            ['WORD', qr/[A-Za-z0-9;,.?$!%&'()*+_\/()\s-]+/],
             
             # New v2.0 patterns
             ['CASE_REF', qr/\[\[/],

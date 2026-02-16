@@ -202,16 +202,10 @@ sub parse {
             }
         }
         elsif ($type eq 'COMMENT') {
-            my $comment_content = '';
-            for my $j ($i + 1 .. $#$tokens) {
-                if ($tokens->[$j]->{type} eq 'COMMENT') {
-                    push @{$result->{comments}}, $comment_content;
-                    $i = $j; # skip to closing #
-                    last;
-                } else {
-                    $comment_content .= $tokens->[$j]->{value};
-                }
-            }
+            my $val = $token->{value};
+            $val =~ s/^#\s*//;
+            push @{$result->{comments}}, $val;
+            $i++;
         }
         elsif ($type eq 'WORD') {
             if ($current_section) {
