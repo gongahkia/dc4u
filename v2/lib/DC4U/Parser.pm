@@ -21,15 +21,25 @@ for document generation with comprehensive error handling.
 =cut
 
 sub new {
-    my $class = shift;
-    my $self = {
-        # Singapore legal requirements
-        required_fields => {
+    my ($class, %opts) = @_;
+    my $jurisdiction = $opts{jurisdiction} || 'singapore';
+    my $required = {
+        singapore => {
             suspect => [qw/name nric race age gender nationality/],
-            charge => [qw/title date explanation/],
+            charge  => [qw/title date explanation/],
             statute => [qw/text/],
-            officer => [qw/name role_division date/]
-        }
+            officer => [qw/name role_division date/],
+        },
+        uk => {
+            suspect => [qw/name dob address/],
+            charge  => [qw/title date explanation/],
+            statute => [qw/text/],
+            officer => [qw/name role_division date/],
+        },
+    };
+    my $self = {
+        jurisdiction    => $jurisdiction,
+        required_fields => $required->{$jurisdiction} || $required->{singapore},
     };
     bless $self, $class;
     return $self;
@@ -43,6 +53,26 @@ Parses tokens and returns structured data.
 
 sub parse {
     my ($self, $tokens, $options) = @_;
+    
+    # allow jurisdiction override from options
+    if ($options && $options->{jurisdiction}) {
+        $self->{jurisdiction} = $options->{jurisdiction};
+        my $required = {
+            singapore => {
+                suspect => [qw/name nric race age gender nationality/],
+                charge  => [qw/title date explanation/],
+                statute => [qw/text/],
+                officer => [qw/name role_division date/],
+            },
+            uk => {
+                suspect => [qw/name dob address/],
+                charge  => [qw/title date explanation/],
+                statute => [qw/text/],
+                officer => [qw/name role_division date/],
+            },
+        };
+        $self->{required_fields} = $required->{$self->{jurisdiction}} || $required->{singapore};
+    }
     
     my $result = {
         output_format => $options->{output_format} || '',
@@ -91,7 +121,11 @@ sub parse {
         elsif ($type eq 'R_SUSPECT_INFO') {
             if (@stack && $stack[-1] eq 'SUSPECT_INFO') {
                 pop @stack;
-                $result->{suspect_info} = $self->_parse_suspect_info($current_content);
+                if ($self->{jurisdiction} eq 'uk') {
+                    $result->{suspect_info} = $self->_parse_suspect_info_uk($current_content);
+                } else {
+                    $result->{suspect_info} = $self->_parse_suspect_info($current_content);
+                }
                 $current_section = '';
             } else {
                 return { error => "Unmatched suspect info closing at line " . $token->{line} };
@@ -105,7 +139,11 @@ sub parse {
         elsif ($type eq 'R_CHARGE_INFO') {
             if (@stack && $stack[-1] eq 'CHARGE_INFO') {
                 pop @stack;
-                $result->{charge_info} = $self->_parse_charge_info($current_content);
+                if ($self->{jurisdiction} eq 'uk') {
+                    $result->{charge_info} = $self->_parse_charge_info_uk($current_content);
+                } else {
+                    $result->{charge_info} = $self->_parse_charge_info($current_content);
+                }
                 $current_section = '';
             } else {
                 return { error => "Unmatched charge info closing at line " . $token->{line} };
@@ -135,7 +173,11 @@ sub parse {
         elsif ($type eq 'R_CHARGING_OFFICER_INFO') {
             if (@stack && $stack[-1] eq 'OFFICER_INFO') {
                 pop @stack;
-                $result->{officer_info} = $self->_parse_officer_info($current_content);
+                if ($self->{jurisdiction} eq 'uk') {
+                    $result->{officer_info} = $self->_parse_officer_info_uk($current_content);
+                } else {
+                    $result->{officer_info} = $self->_parse_officer_info($current_content);
+                }
                 $current_section = '';
             } else {
                 return { error => "Unmatched officer info closing at line " . $token->{line} };
@@ -334,6 +376,65 @@ sub _validate_required_fields {
     }
     
     return undef; # No errors
+}
+
+=head2 _parse_suspect_info_uk
+
+Parses UK suspect information: name; dob; address
+
+=cut
+
+sub _parse_suspect_info_uk {
+    my ($self, $content) = @_;
+    my @fields = split /;/, $content;
+    if (@fields != 3) {
+        die "Invalid UK suspect information format. Expected 3 fields (name; dob; address), got " . scalar(@fields);
+    }
+    return {
+        name    => $fields[0],
+        dob     => $self->_parse_date($fields[1]),
+        address => $fields[2],
+    };
+}
+
+=head2 _parse_charge_info_uk
+
+Parses UK charge information: title; date; location; explanation
+
+=cut
+
+sub _parse_charge_info_uk {
+    my ($self, $content) = @_;
+    my @fields = split /;/, $content;
+    if (@fields < 3 || @fields > 4) {
+        die "Invalid UK charge information format. Expected 3-4 fields, got " . scalar(@fields);
+    }
+    my $result = {
+        title       => $fields[0],
+        date        => $self->_parse_date($fields[1]),
+        explanation => $fields[-1],
+    };
+    $result->{charge_location} = $fields[2] if @fields == 4;
+    return $result;
+}
+
+=head2 _parse_officer_info_uk
+
+Parses UK officer (prosecutor) information: name; role; date
+
+=cut
+
+sub _parse_officer_info_uk {
+    my ($self, $content) = @_;
+    my @fields = split /;/, $content;
+    if (@fields != 3) {
+        die "Invalid UK officer information format. Expected 3 fields, got " . scalar(@fields);
+    }
+    return {
+        name          => $fields[0],
+        role_division => $fields[1], # "prosecutor" terminology
+        date          => $self->_parse_date($fields[2]),
+    };
 }
 
 1;
