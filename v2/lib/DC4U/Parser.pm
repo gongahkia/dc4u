@@ -245,23 +245,51 @@ Parses date in DD/MM/YYYY format.
 sub _parse_date {
     my ($self, $date_str) = @_;
     
-    # Clean up the date string (remove extra spaces)
-    $date_str =~ s/\s+//g;
+    # clean up (trim leading/trailing spaces but preserve internal spaces for written dates)
+    $date_str =~ s/^\s+|\s+$//g;
     
-    if ($date_str =~ /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/) {
+    my @months = qw/January February March April May June
+                    July August September October November December/;
+    my %month_map;
+    for my $i (0 .. $#months) {
+        $month_map{lc($months[$i])} = $i + 1;
+        $month_map{lc(substr($months[$i], 0, 3))} = $i + 1; # abbreviated
+    }
+    
+    # DD/MM/YYYY or D/M/YYYY numeric format
+    if ($date_str =~ /^(\d{1,2})\s*\/\s*(\d{1,2})\s*\/\s*(\d{4})$/) {
         my ($day, $month, $year) = ($1, $2, $3);
-        
-        # Validate date
         if ($day < 1 || $day > 31 || $month < 1 || $month > 12 || $year < 1) {
             die "Invalid date: $date_str";
         }
-        
-        my @months = qw/January February March April May June
-                       July August September October November December/;
-        
         return "$day $months[$month-1] $year";
-    } else {
-        die "Invalid date format: $date_str. Expected DD/MM/YYYY";
+    }
+    # written format: "19 August 2019" or "19 Aug 2019"
+    elsif ($date_str =~ /^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/) {
+        my ($day, $month_name, $year) = ($1, $2, $3);
+        my $month_num = $month_map{lc($month_name)};
+        unless ($month_num) {
+            die "Invalid month name: $month_name in date: $date_str";
+        }
+        if ($day < 1 || $day > 31 || $year < 1) {
+            die "Invalid date: $date_str";
+        }
+        return "$day $months[$month_num-1] $year";
+    }
+    # "August 19, 2019" format
+    elsif ($date_str =~ /^([A-Za-z]+)\s+(\d{1,2}),?\s+(\d{4})$/) {
+        my ($month_name, $day, $year) = ($1, $2, $3);
+        my $month_num = $month_map{lc($month_name)};
+        unless ($month_num) {
+            die "Invalid month name: $month_name in date: $date_str";
+        }
+        if ($day < 1 || $day > 31 || $year < 1) {
+            die "Invalid date: $date_str";
+        }
+        return "$day $months[$month_num-1] $year";
+    }
+    else {
+        die "Invalid date format: $date_str. Expected DD/MM/YYYY or 'D Month YYYY'";
     }
 }
 

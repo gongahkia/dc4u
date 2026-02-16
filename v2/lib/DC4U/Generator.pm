@@ -99,7 +99,7 @@ sub _generate_pdf {
     my $text = $page->text();
     my $y = $page_h - $margin_top;
 
-    my $content = _build_charge_content($data);
+    my $content = _build_charge_content($data, $config);
     # strip html to plain text lines
     $content =~ s/<br\s*\/?>/\n/gi;
     $content =~ s/<\/(?:p|div|h[1-6]|li|tr)>/\n/gi;
@@ -140,7 +140,7 @@ Generates HTML document.
 sub _generate_html {
     my ($data, $config) = @_;
     
-    my $content = _build_charge_content($data);
+    my $content = _build_charge_content($data, $config);
     
     # use external CSS from config or default path
     my $css_ref = 'charge.css';
@@ -194,7 +194,7 @@ Generates plain text document.
 sub _generate_txt {
     my ($data, $config) = @_;
     
-    my $content = _build_charge_content($data);
+    my $content = _build_charge_content($data, $config);
     
     # Remove HTML tags and format for plain text
     $content =~ s/<[^>]+>//g;
@@ -215,7 +215,7 @@ Generates Markdown document.
 sub _generate_md {
     my ($data, $config) = @_;
     
-    my $content = _build_charge_content($data);
+    my $content = _build_charge_content($data, $config);
     
     # Convert HTML to Markdown
     $content =~ s/<h1[^>]*>(.*?)<\/h1>/# $1\n\n/g;
@@ -240,7 +240,7 @@ Generates R Markdown document.
 sub _generate_rmd {
     my ($data, $config) = @_;
     
-    my $content = _build_charge_content($data);
+    my $content = _build_charge_content($data, $config);
     
     return <<"RMD";
 ---
@@ -265,7 +265,7 @@ sub _generate_docx {
         die "Archive::Zip required for DOCX output. Install via: cpan Archive::Zip";
     }
 
-    my $content = _build_charge_content($data);
+    my $content = _build_charge_content($data, $config);
     # strip to plain text for OOXML
     $content =~ s/<br\s*\/?>/\n/gi;
     $content =~ s/<\/(?:p|div|h[1-6]|li|tr)>/\n/gi;
@@ -331,8 +331,20 @@ Builds the charge content in HTML format.
 =cut
 
 sub _build_charge_content {
-    my ($data) = @_;
-    
+    my ($data, $config) = @_;
+
+    # use Template module if config provides jurisdiction
+    if ($config && $config->can('get')) {
+        my $jurisdiction = $config->get('jurisdiction') // 'singapore';
+        eval {
+            require DC4U::Template;
+            my $tmpl = DC4U::Template->new();
+            my $template_name = "${jurisdiction}_charge";
+            return $tmpl->render($template_name, $data, 'HTML');
+        };
+        # fall through to hardcoded on error
+    }
+
     my $suspect = $data->{suspect_info};
     my $charge = $data->{charge_info};
     my $officer = $data->{officer_info};
