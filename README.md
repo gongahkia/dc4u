@@ -34,23 +34,23 @@ A Legal Draft Charge Creator.
 ### `DC4U` TUI
 
 <div align="center">
-    <img src="./asset/reference/1.png" width="42%">
-    <img src="./asset/reference/2.png" width="42%">
+    <img src="./asset/reference/1.png" width="45%">
+    <img src="./asset/reference/2.png" width="45%">
 </div>
 
 <div align="center">
-    <img src="./asset/reference/3.png" width="42%">
-    <img src="./asset/reference/4.png" width="42%">
+    <img src="./asset/reference/3.png" width="45%">
+    <img src="./asset/reference/4.png" width="45%">
 </div>
 
 <div align="center">
-    <img src="./asset/reference/5.png" width="42%">
-    <img src="./asset/reference/6.png" width="42%">
+    <img src="./asset/reference/5.png" width="45%">
+    <img src="./asset/reference/6.png" width="45%">
 </div>
 
 ### Eg. Draft Charge created with `DC4U`
 
-![](assets/reference/draft-charge-eg.png)
+![](asset/reference/draft-charge-eg.png)
 
 ## Usage
 
