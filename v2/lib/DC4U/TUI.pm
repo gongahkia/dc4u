@@ -144,8 +144,8 @@ sub _main_flow {
     my $file;
     while (1) {
         $log->info('Screen: FileBrowser');
-        $self->_draw_header('DC4U \x{2014} Select Input File');
-        $self->_draw_status('\x{2191}\x{2193}=navigate  Enter=select  l=view logs  q=quit');
+        $self->_draw_header('DC4U - Select Input File');
+        $self->_draw_status('Up/Down=navigate  Enter=select  l=view logs  q=quit');
         refresh();
         my $fb = DC4U::TUI::FileBrowser->new(
             top => $top, bottom => $bot, width => $w
@@ -155,8 +155,8 @@ sub _main_flow {
         if ($file eq '__VIEW_LOGS__') {
             $log->info('User opened LogViewer');
             erase();
-            $self->_draw_header('DC4U \x{2014} Session Logs');
-            $self->_draw_status('\x{2191}\x{2193}=scroll  g/G=top/bottom  r=reload  q=back');
+            $self->_draw_header('DC4U - Session Logs');
+            $self->_draw_status('Up/Down=scroll  g/G=top/bottom  r=reload  q=back');
             refresh();
             my $lv = DC4U::TUI::LogViewer->new(
                 top => $top, bottom => $bot, width => $w,

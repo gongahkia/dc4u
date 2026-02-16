@@ -106,6 +106,19 @@ sub run {
 sub _draw {
     my ($self, $win, $visible) = @_;
     my $w = $self->{width};
+    my $h = getmaxy($win);
+
+    # title bar
+    attron(COLOR_PAIR(1) | A_BOLD);
+    move(0, 0); addstr(' ' x $w);
+    move(1, 0); addstr(' ' x $w);
+    move(2, 0); addstr(' ' x $w);
+    my $title = 'DC4U - Select Input File';
+    my $cx = int(($w - length($title)) / 2);
+    $cx = 0 if $cx < 0;
+    move(1, $cx); addstr($title);
+    attroff(COLOR_PAIR(1) | A_BOLD);
+
     # column header
     move($self->{top}, 0);
     attron(A_BOLD | A_UNDERLINE);
@@ -123,7 +136,7 @@ sub _draw {
         my $f = $self->{files}[$idx];
         my $sel = ($idx == $self->{cursor});
         my $line = sprintf("%s %-40s %8s %8d",
-            $sel ? '▸' : ' ',
+            $sel ? '>' : ' ',
             $f->{name},
             _format_size($f->{size}),
             $f->{charges},
@@ -136,6 +149,15 @@ sub _draw {
             addstr(substr($line, 0, $w));
         }
     }
+
+    # help bar at bottom
+    my $help = ' Up/Down=navigate  Enter=select  l=view logs  q=quit';
+    attron(COLOR_PAIR(1));
+    move($h - 2, 0); addstr(' ' x $w);
+    move($h - 1, 0); addstr(' ' x $w);
+    move($h - 2, 0); addstr(substr($help, 0, $w));
+    attroff(COLOR_PAIR(1));
+
     refresh();
 }
 
