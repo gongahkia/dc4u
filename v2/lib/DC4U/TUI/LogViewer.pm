@@ -89,13 +89,21 @@ sub run {
 sub _draw {
     my ($self, $win, $visible) = @_;
     my $w = $self->{width};
+    my $h = getmaxy($win);
     my $lines = $self->{lines};
     my $total = scalar(@$lines);
 
-    # header line: line count + scroll position
+    # title bar
+    attron(COLOR_PAIR(1) | A_BOLD);
+    for my $r (0..2) { move($r, 0); addstr(' ' x $w); }
+    my $title = 'DC4U - Session Logs';
+    move(1, int(($w - length($title)) / 2)); addstr($title);
+    attroff(COLOR_PAIR(1) | A_BOLD);
+
+    # subheader: line count + scroll position
     move($self->{top}, 0);
     attron(A_BOLD | A_UNDERLINE);
-    my $hdr = sprintf("  Log (%d lines)  [scroll: %d/%d]  r=reload  g/G=top/bottom  q=back",
+    my $hdr = sprintf("  Log (%d lines)  [scroll: %d/%d]",
         $total, $self->{scroll} + 1, $total);
     addstr(substr($hdr, 0, $w));
     attroff(A_BOLD | A_UNDERLINE);
@@ -125,6 +133,14 @@ sub _draw {
             addstr(substr($line, 0, $w));
         }
     }
+
+    # help bar
+    attron(COLOR_PAIR(1));
+    move($h - 2, 0); addstr(' ' x $w);
+    move($h - 1, 0); addstr(' ' x $w);
+    move($h - 2, 0); addstr(' Up/Down=scroll  g/G=top/bottom  PgUp/PgDn  r=reload  q=back');
+    attroff(COLOR_PAIR(1));
+
     refresh();
 }
 

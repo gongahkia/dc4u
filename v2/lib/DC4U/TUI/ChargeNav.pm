@@ -63,6 +63,14 @@ sub _draw {
     my ($self, $win, $sidebar_w, $preview_x, $visible) = @_;
     my $results = $self->{results};
     my $w = $self->{width};
+    my $h = getmaxy($win);
+
+    # title bar
+    attron(COLOR_PAIR(1) | A_BOLD);
+    for my $r (0..2) { move($r, 0); addstr(' ' x $w); }
+    my $title = 'DC4U - Charge Navigator';
+    move(1, int(($w - length($title)) / 2)); addstr($title);
+    attroff(COLOR_PAIR(1) | A_BOLD);
 
     # sidebar: charge index
     for my $i (0 .. $#$results) {
@@ -73,7 +81,7 @@ sub _draw {
         my $r = $results->[$i];
         my $sel = ($i == $self->{cursor});
         my $label = sprintf("%s Charge %d [%s]",
-            $sel ? '▸' : ' ',
+            $sel ? '>' : ' ',
             $r->{charge_number} // ($i + 1),
             $r->{format} // '?',
         );
@@ -89,7 +97,7 @@ sub _draw {
     # vertical divider
     for my $y ($self->{top} .. $self->{bottom} - 1) {
         move($y, $sidebar_w);
-        addstr('│');
+        addstr('|');
     }
 
     # preview pane: show stripped output of selected charge
@@ -106,6 +114,14 @@ sub _draw {
         addstr(substr($content, 0, $pw));
         clrtoeol();
     }
+
+    # help bar
+    attron(COLOR_PAIR(1));
+    move($h - 2, 0); addstr(' ' x $w);
+    move($h - 1, 0); addstr(' ' x $w);
+    move($h - 2, 0); addstr(' Up/Down=navigate  Tab=cycle  Enter=preview  q=back');
+    attroff(COLOR_PAIR(1));
+
     refresh();
 }
 
