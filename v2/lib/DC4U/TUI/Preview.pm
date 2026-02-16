@@ -60,6 +60,15 @@ sub show {
 sub _draw_lines {
     my ($self, $win, $lines, $visible) = @_;
     my $w = $self->{width};
+    my $h = getmaxy($win);
+
+    # title bar
+    attron(COLOR_PAIR(1) | A_BOLD);
+    for my $r (0..2) { move($r, 0); addstr(' ' x $w); }
+    my $title = 'DC4U - Preview Output';
+    move(1, int(($w - length($title)) / 2)); addstr($title);
+    attroff(COLOR_PAIR(1) | A_BOLD);
+
     for my $i (0 .. $visible - 1) {
         my $idx = $self->{scroll} + $i;
         my $y = $self->{top} + $i;
@@ -81,6 +90,14 @@ sub _draw_lines {
             addstr(substr($line, 0, $w));
         }
     }
+
+    # help bar
+    attron(COLOR_PAIR(1));
+    move($h - 2, 0); addstr(' ' x $w);
+    move($h - 1, 0); addstr(' ' x $w);
+    move($h - 2, 0); addstr(' Up/Down=scroll  Enter=confirm write to disk  q=cancel');
+    attroff(COLOR_PAIR(1));
+
     refresh();
 }
 
