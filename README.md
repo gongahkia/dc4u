@@ -38,6 +38,16 @@ A Legal Draft Charge Creator.
     <img src="./assets/reference/2.png" width="42%">
 </div>
 
+<div align="center">
+    <img src="./assets/reference/3.png" width="42%">
+    <img src="./assets/reference/4.png" width="42%">
+</div>
+
+<div align="center">
+    <img src="./assets/reference/5.png" width="42%">
+    <img src="./assets/reference/6.png" width="42%">
+</div>
+
 ### Eg. Draft Charge created with `DC4U`
 
 ![](assets/reference/draft-charge-eg.png)
@@ -49,13 +59,13 @@ The below instructions are for using `DC4U` on your client machine.
 1. First run the below commands to install `DC4U` locally.
 
 ```console
-
+$
 ```
 
 2. Next, execute ...
 
 ```console
-
+$
 ```
 
 ## Architecture
