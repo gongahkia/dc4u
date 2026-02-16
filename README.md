@@ -20,14 +20,14 @@ A Legal Draft Charge Creator.
 
 ## Stack
 
-* *Language*: [Python 3.8+](https://www.python.org/) (v1.0), [Perl 5.32+](https://www.perl.org/) (v2.0)
-* *Package Manager*: [pip](https://pip.pypa.io/) (v1.0), [CPAN](https://www.cpan.org/) (v2.0)
+* *Language*: [Python 3.8+](https://www.python.org/), [Perl 5.32+](https://www.perl.org/)
+* *Package Manager*: [pip](https://pip.pypa.io/), [CPAN](https://www.cpan.org/)
 * *Document Processing*: [R Markdown](https://rmarkdown.rstudio.com/), [Pandoc](https://pandoc.org/), [LaTeX](https://www.latex-project.org/)
-* *PDF Generation*: [PDF::API2](https://metacpan.org/pod/PDF::API2) (v2.0), [TinyTeX](https://yihui.org/tinytex/) (v1.0)
-* *Office Integration*: [officedown](https://davidgohel.github.io/officedown/) (v1.0), [RTF::Writer](https://metacpan.org/pod/RTF::Writer) (v2.0)
-* *Configuration*: [YAML](https://yaml.org/) (v2.0)
-* *Build System*: [Make](https://www.gnu.org/software/make/) (v1.0 & v2.0)
-* *Testing*: [Perl Test Framework](https://perldoc.perl.org/perlunitut) (v2.0)
+* *PDF Generation*: [PDF::API2](https://metacpan.org/pod/PDF::API2), [TinyTeX](https://yihui.org/tinytex/)
+* *Office Integration*: [officedown](https://davidgohel.github.io/officedown/), [RTF::Writer](https://metacpan.org/pod/RTF::Writer)
+* *Configuration*: [YAML](https://yaml.org/)
+* *Build System*: [Make](https://www.gnu.org/software/make/)
+* *Testing*: [Perl Test Framework](https://perldoc.perl.org/perlunitut)
 
 ## Screenshots
 
