@@ -34,18 +34,18 @@ A Legal Draft Charge Creator.
 ### `DC4U` TUI
 
 <div align="center">
-    <img src="./assets/reference/1.png" width="42%">
-    <img src="./assets/reference/2.png" width="42%">
+    <img src="./asset/reference/1.png" width="42%">
+    <img src="./asset/reference/2.png" width="42%">
 </div>
 
 <div align="center">
-    <img src="./assets/reference/3.png" width="42%">
-    <img src="./assets/reference/4.png" width="42%">
+    <img src="./asset/reference/3.png" width="42%">
+    <img src="./asset/reference/4.png" width="42%">
 </div>
 
 <div align="center">
-    <img src="./assets/reference/5.png" width="42%">
-    <img src="./assets/reference/6.png" width="42%">
+    <img src="./asset/reference/5.png" width="42%">
+    <img src="./asset/reference/6.png" width="42%">
 </div>
 
 ### Eg. Draft Charge created with `DC4U`
@@ -88,5 +88,5 @@ $
 The name `dc4u` is in reference to [Funny Valentine](https://jojo.fandom.com/wiki/Funny_Valentine)'s (ファニー・ヴァレンタイン) [Stand](https://jojo.fandom.com/wiki/Stand) of the same name, [Dirty Deeds Done Dirt Cheap](https://jojo.fandom.com/wiki/Dirty_Deeds_Done_Dirt_Cheap) *(often shortened to D4C)* in [Part 7: Steel Ball Run](https://jojo.fandom.com/wiki/Steel_Ball_Run) of the ongoing manga series [JoJo's Bizarre Adventure](https://jojowiki.com/JoJo_Wiki).
 
 <div align="center">
-    <img src="./assets/logo/dc4u.png" width="50%">
+    <img src="./asset/logo/dc4u.png" width="50%">
 </div>
