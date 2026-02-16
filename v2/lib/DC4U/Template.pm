@@ -151,8 +151,41 @@ Renders PDF template.
 sub _render_pdf {
     my ($self, $template, $data) = @_;
     
-    # For now, return HTML that can be converted to PDF
-    return $self->_render_html($template, $data);
+    # Try to locate pandoc
+    my $pandoc_path = `which pandoc` || '/opt/homebrew/bin/pandoc';
+    chomp $pandoc_path;
+    unless (-x $pandoc_path) {
+        die "Error: pandoc not found. Please install pandoc to generate PDFs.";
+    }
+    
+    my $html = $self->_render_html($template, $data);
+    
+    # Use File::Temp for safe file handling
+    require File::Temp;
+    my ($fh_in, $in_file) = File::Temp::tempfile(SUFFIX => '.html', UNLINK => 1);
+    binmode $fh_in, ':encoding(UTF-8)';
+    print $fh_in "<html><body>\n" . $html . "\n</body></html>";
+    close $fh_in;
+    
+    my ($fh_out, $out_file) = File::Temp::tempfile(SUFFIX => '.pdf', UNLINK => 1);
+    close $fh_out;
+    
+    # Convert using pandoc
+    my $cmd = "$pandoc_path -s \"$in_file\" -o \"$out_file\" 2>&1";
+    my $output = `$cmd`;
+    
+    if ($? != 0) {
+        die "PDF generation failed (pandoc): $output";
+    }
+    
+    # Read binary PDF content
+    open my $pdf_fh, '<', $out_file or die "Cannot read generated PDF: $!";
+    binmode $pdf_fh;
+    local $/;
+    my $content = <$pdf_fh>;
+    close $pdf_fh;
+    
+    return $content;
 }
 
 =head2 _render_txt

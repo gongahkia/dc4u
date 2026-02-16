@@ -300,6 +300,12 @@ sub _main_flow {
     $log->info("Writing output to: $outfile");
     eval {
         open my $fh, '>', $outfile or die "Cannot write $outfile: $!";
+        if ($ext eq 'pdf') {
+            binmode $fh;
+        } else {
+            binmode $fh, ':encoding(UTF-8)';
+        }
+        
         if (ref $selected_result eq 'HASH') {
             print $fh $selected_result->{output};
         } else {
