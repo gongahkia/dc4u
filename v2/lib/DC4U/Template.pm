@@ -91,13 +91,19 @@ sub _render_html {
     $html .= $template->{charge};
     $html .= $template->{officer};
     
-    # Replace placeholders
-    $html =~ s/\{\{suspect_name\}\}/$data->{suspect_info}->{name}/g;
-    $html =~ s/\{\{suspect_nric\}\}/$data->{suspect_info}->{nric}/g;
-    $html =~ s/\{\{suspect_race\}\}/$data->{suspect_info}->{race}/g;
-    $html =~ s/\{\{suspect_age\}\}/$data->{suspect_info}->{age}/g;
-    $html =~ s/\{\{suspect_gender\}\}/$data->{suspect_info}->{gender}/g;
-    $html =~ s/\{\{suspect_nationality\}\}/$data->{suspect_info}->{nationality}/g;
+    # replace placeholders — Singapore
+    $html =~ s/\{\{suspect_name\}\}/$data->{suspect_info}->{name} \/\/ ''/ge;
+    $html =~ s/\{\{suspect_nric\}\}/$data->{suspect_info}->{nric} \/\/ ''/ge;
+    $html =~ s/\{\{suspect_race\}\}/$data->{suspect_info}->{race} \/\/ ''/ge;
+    $html =~ s/\{\{suspect_age\}\}/$data->{suspect_info}->{age} \/\/ ''/ge;
+    $html =~ s/\{\{suspect_gender\}\}/$data->{suspect_info}->{gender} \/\/ ''/ge;
+    $html =~ s/\{\{suspect_nationality\}\}/$data->{suspect_info}->{nationality} \/\/ ''/ge;
+    
+    # replace placeholders — UK
+    $html =~ s/\{\{suspect_dob\}\}/$data->{suspect_info}->{dob} \/\/ ''/ge;
+    $html =~ s/\{\{suspect_address\}\}/$data->{suspect_info}->{address} \/\/ ''/ge;
+    $html =~ s/\{\{charge_location\}\}/$data->{charge_info}->{charge_location} \/\/ ''/ge;
+    $html =~ s/\{\{charge_description\}\}/$data->{charge_info}->{explanation} \/\/ ''/ge;
     
     $html =~ s/\{\{charge_title\}\}/$data->{charge_info}->{title}/g;
     $html =~ s/\{\{charge_date\}\}/$data->{charge_info}->{date}/g;
