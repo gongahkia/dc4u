@@ -8,17 +8,14 @@ A Legal Draft Charge Creator.
 
 ## Motivation
 
-[Draft charges](https://mustsharenews.com/wp-content/uploads/2018/12/TOC-Charge-Sheet.jpg) are inane to format. `DC4U` simplifies the entire process of creating Draft Charges, by transpiling a human-readable markup format (`.dc`) to different targets for viewing and distribution.
-
-This format is intended to allow for quick integration with existing workflows when taking down material facts.
+[Draft charges](https://mustsharenews.com/wp-content/uploads/2018/12/TOC-Charge-Sheet.jpg) are inane to format. `DC4U` simplifies the entire process of creating Draft Charges, by transpiling a human-readable markup format (`.dc`) to multiple targets outputs for viewing and distribution.
 
 ## Purpose
 
-* Speed up process of formatting draft charges
-* Small source code binary and compilation target, faster compilation times
+* Speed up formatting of draft charges
 * Simplify inane legal admin work for lawyers
-* `DC4U` transpiler takes in a simple reworked markup format and transpiles to multiple targets
-* Afraid you won't remember `.dc` language syntax? The `DC4U` transpiler will *kindly* point out the error and correct you accordingly.
+* Quick integration with existing programmatic workflows via pipes
+* Small source code binary and compilation target, faster compilation times
 
 ## Stack
 
@@ -58,7 +55,14 @@ Refer to [`samples/`](./samples/) for examples and expansion on `.dc` syntax.
 
 ## Screenshots
 
-Example of a draft charge created with `DC4U`
+### `DC4U` TUI
+
+<div align="center">
+    <img src="./assets/reference/1.png" width="42%">
+    <img src="./assets/reference/2.png" width="42%">
+</div>
+
+### Eg. Draft Charge created with `DC4U`
 
 ![](assets/reference/draft-charge-eg.png)
 
@@ -80,92 +84,7 @@ The below instructions are for using `DC4U` on your client machine.
 
 ## Architecture
 
-### Overview
-
-```mermaid
-C4Context
-    title DC4U - Draft Charges 4 U System Context
-    
-    Person(legal, "Legal Professional", "Lawyer, Legal Officer, or Court Clerk")
-    Person(admin, "System Administrator", "IT Administrator managing DC4U installation")
-    
-    System(dc4u, "DC4U", "Legal Document Generator", "Converts .dc markup to formatted legal documents")
-    
-    System_Ext(r_markdown, "R Markdown", "Document processing and PDF generation")
-    System_Ext(pandoc, "Pandoc", "Document format conversion")
-    System_Ext(latex, "LaTeX", "Professional document typesetting")
-    System_Ext(office, "Microsoft Office", "Word document generation and editing")
-    
-    Rel(legal, dc4u, "Creates .dc files", "Markup language")
-    Rel(legal, dc4u, "Generates documents", "PDF, HTML, DOCX, etc.")
-    Rel(admin, dc4u, "Installs & configures", "System setup")
-    
-    Rel(dc4u, r_markdown, "Uses for PDF generation", "v1.0")
-    Rel(dc4u, pandoc, "Uses for format conversion", "v1.0")
-    Rel(dc4u, latex, "Uses for typesetting", "v1.0")
-    Rel(dc4u, office, "Generates DOCX files", "v1.0 & v2.0")
-    
-    UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="2")
-```
-
-### Internal Architecture
-
-```mermaid
-C4Container
-    title DC4U Internal Architecture
-    
-    Person(user, "Legal Professional", "Creates and processes legal documents")
-    
-    Container_Boundary(dc4u_system, "DC4U System") {
-        Container(v1_python, "DC4U v1.0", "Python 3.8+", "Lexer, Parser, Interpreter")
-        Container(v2_perl, "DC4U v2.0", "Perl 5.32+", "Modular architecture with generators")
-        
-        Container(lexer, "Lexer", "Python/Perl", "Tokenizes .dc markup language")
-        Container(parser, "Parser", "Python/Perl", "Validates syntax and structure")
-        Container(generator, "Generator", "Python/Perl", "Creates output in various formats")
-        Container(config, "Config Manager", "YAML", "Manages system configuration")
-        Container(templates, "Template Engine", "Perl", "Handles document templates")
-    }
-    
-    Container_Boundary(external_tools, "External Tools") {
-        Container(r_markdown, "R Markdown", "R", "Document processing")
-        Container(pandoc, "Pandoc", "Haskell", "Format conversion")
-        Container(pdf_api, "PDF::API2", "Perl", "Native PDF generation")
-        Container(rtf_writer, "RTF::Writer", "Perl", "Word document generation")
-    }
-    
-    Container_Boundary(output_formats, "Output Formats") {
-        Container(pdf_out, "PDF", "Binary", "Professional documents")
-        Container(html_out, "HTML", "Web", "Web-ready documents")
-        Container(txt_out, "TXT", "Plain text", "Universal viewing")
-        Container(docx_out, "DOCX", "Microsoft Word", "Office integration")
-    }
-    
-    Rel(user, v1_python, "Uses", "Command line")
-    Rel(user, v2_perl, "Uses", "Command line")
-    
-    Rel(v1_python, lexer, "Processes", "Tokenization")
-    Rel(v1_python, parser, "Validates", "Syntax checking")
-    Rel(v1_python, generator, "Generates", "Output creation")
-    
-    Rel(v2_perl, lexer, "Processes", "Tokenization")
-    Rel(v2_perl, parser, "Validates", "Syntax checking")
-    Rel(v2_perl, generator, "Generates", "Output creation")
-    Rel(v2_perl, config, "Uses", "Configuration")
-    Rel(v2_perl, templates, "Uses", "Document templates")
-    
-    Rel(generator, r_markdown, "Uses", "v1.0 PDF generation")
-    Rel(generator, pandoc, "Uses", "v1.0 format conversion")
-    Rel(generator, pdf_api, "Uses", "v2.0 PDF generation")
-    Rel(generator, rtf_writer, "Uses", "v2.0 DOCX generation")
-    
-    Rel(generator, pdf_out, "Creates", "PDF documents")
-    Rel(generator, html_out, "Creates", "HTML documents")
-    Rel(generator, txt_out, "Creates", "Text documents")
-    Rel(generator, docx_out, "Creates", "Word documents")
-    
-    UpdateLayoutConfig($c4ShapeInRow="2", $c4BoundaryInRow="1")
-```
+<img src="./assets/reference/architecture.png">
 
 ## Reference
 
