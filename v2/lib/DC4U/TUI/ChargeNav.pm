@@ -42,15 +42,18 @@ sub run {
     while (1) {
         $self->_draw($win, $sidebar_w, $preview_x, $visible);
         my $ch = getch();
+        next unless defined $ch;
         if ($ch eq 'q' || $ch eq 'Q') {
             return undef;
-        } elsif ($ch == KEY_UP || $ch eq 'k') {
+        }
+        my $code = (length($ch) == 1) ? ord($ch) : $ch;
+        if ($code == KEY_UP || $ch eq 'k') {
             $self->{cursor}-- if $self->{cursor} > 0;
-        } elsif ($ch == KEY_DOWN || $ch eq 'j') {
+        } elsif ($code == KEY_DOWN || $ch eq 'j') {
             $self->{cursor}++ if $self->{cursor} < $#$results;
-        } elsif ($ch == 9) { # tab
+        } elsif ($code == 9) { # tab
             $self->{cursor} = ($self->{cursor} + 1) % scalar(@$results);
-        } elsif ($ch == 10 || $ch == KEY_ENTER || $ch == 13) {
+        } elsif ($code == 10 || $code == 13 || $code == KEY_ENTER) {
             return $results->[$self->{cursor}];
         }
     }
