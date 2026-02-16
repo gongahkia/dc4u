@@ -142,7 +142,16 @@ sub _generate_html {
     
     my $content = _build_charge_content($data);
     
-    return <<"HTML";
+    # use external CSS from config or default path
+    my $css_ref = 'charge.css';
+    if ($config && $config->can('get')) {
+        my $css_file = $config->get('formats.html.css_file');
+        if ($css_file && -f $css_file) {
+            # embed file contents
+            open my $fh, '<', $css_file;
+            my $css = do { local $/; <$fh> };
+            close $fh;
+            return <<"HTML";
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -150,14 +159,24 @@ sub _generate_html {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Draft Charge</title>
     <style>
-        body { font-family: 'Times New Roman', serif; margin: 40px; line-height: 1.6; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .charge-section { margin: 20px 0; }
-        .suspect-info { margin: 15px 0; }
-        .officer-info { margin-top: 30px; }
-        h1, h2 { color: #333; }
-        .bold { font-weight: bold; }
+$css
     </style>
+</head>
+<body>
+    $content
+</body>
+</html>
+HTML
+        }
+    }
+    return <<"HTML";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draft Charge</title>
+    <link rel="stylesheet" href="$css_ref">
 </head>
 <body>
     $content
@@ -240,22 +259,69 @@ Generates DOCX document (via RTF).
 
 sub _generate_docx {
     my ($data, $config) = @_;
-    
-    # Generate RTF content that can be converted to DOCX
+
+    eval { require Archive::Zip; };
+    if ($@) {
+        die "Archive::Zip required for DOCX output. Install via: cpan Archive::Zip";
+    }
+
     my $content = _build_charge_content($data);
-    
-    # Convert HTML to RTF
-    $content =~ s/<h1[^>]*>(.*?)<\/h1>/{\\b\\fs24 $1}\\par\n/g;
-    $content =~ s/<h2[^>]*>(.*?)<\/h2>/{\\b\\fs20 $1}\\par\n/g;
-    $content =~ s/<p[^>]*>(.*?)<\/p>/$1\\par\n/g;
-    $content =~ s/<br\s*\/?>\s*/\\par\n/g;
+    # strip to plain text for OOXML
+    $content =~ s/<br\s*\/?>/\n/gi;
+    $content =~ s/<\/(?:p|div|h[1-6]|li|tr)>/\n/gi;
     $content =~ s/<[^>]+>//g;
     $content =~ s/&nbsp;/ /g;
     $content =~ s/&amp;/&/g;
     $content =~ s/&lt;/</g;
     $content =~ s/&gt;/>/g;
-    
-    return "{\\rtf1\\ansi\\deff0 $content}";
+
+    # build paragraphs XML
+    my @lines = split /\n/, $content;
+    my $body_xml = '';
+    for my $line (@lines) {
+        next unless $line =~ /\S/;
+        $line =~ s/&/&amp;/g;
+        $line =~ s/</&lt;/g;
+        $line =~ s/>/&gt;/g;
+        $body_xml .= "<w:p><w:r><w:t xml:space=\"preserve\">$line</w:t></w:r></w:p>\n";
+    }
+
+    my $document_xml = <<"XML";
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+<w:body>
+$body_xml
+</w:body>
+</w:document>
+XML
+
+    my $content_types = <<'XML';
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+</Types>
+XML
+
+    my $rels = <<'XML';
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+</Relationships>
+XML
+
+    my $zip = Archive::Zip->new();
+    $zip->addString($content_types, '[Content_Types].xml');
+    $zip->addString($rels, '_rels/.rels');
+    $zip->addString($document_xml, 'word/document.xml');
+
+    my $output = '';
+    open my $fh, '>', \$output or die "Cannot write to string: $!";
+    binmode $fh;
+    $zip->writeToFileHandle($fh);
+    close $fh;
+    return $output;
 }
 
 =head2 _build_charge_content
@@ -301,6 +367,33 @@ sub _build_charge_content {
     <p>$officer->{date}</p>
 </div>
 HTML
+}
+
+=head2 _pdf_wrap
+
+Word-wraps a line of text to fit within a given pixel width.
+
+=cut
+
+sub _pdf_wrap {
+    my ($text, $font, $size, $max_w) = @_;
+    return ('') unless defined $text && length($text);
+    my @result;
+    my @words = split /\s+/, $text;
+    my $line = '';
+    for my $word (@words) {
+        my $test = length($line) ? "$line $word" : $word;
+        # approximate width: avg char width ~= font_size * 0.5
+        my $approx_w = length($test) * $size * 0.5;
+        if ($approx_w > $max_w && length($line)) {
+            push @result, $line;
+            $line = $word;
+        } else {
+            $line = $test;
+        }
+    }
+    push @result, $line if length($line);
+    return @result ? @result : ('');
 }
 
 1;
