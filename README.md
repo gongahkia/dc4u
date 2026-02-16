@@ -64,40 +64,18 @@ Example of a draft charge created with `DC4U`
 
 ## Usage
 
-### Installation
+The below instructions are for using `DC4U` on your client machine.
 
-This installation also handles R markdown default toolchain's installation, as well as compilation targets to `.pdf` and `.docx`.
-
-#### WSL (Debian)
+1. First run the below commands to install `DC4U` locally.
 
 ```console
-$ git clone https://github.com/gongahkia/dc4u
-$ sudo apt update && sudo apt upgrade && sudo apt autoremove
-$ sudo apt -y install r-base gdebi-core pandoc-citeproc
-$ sudo apt install texlive-latex-base texlive-fonts-recommended texlive-latex-extra
-$ sudo R
-> install.packages("rmarkdown")
-> install.packages("officedown")
-> install.packages('tinytex')
-> tinytex::install_tinytex()
-> Save workspace image? [y/n/c]: n
-$ exit
+
 ```
 
-#### OSX
+2. Next, execute ...
 
 ```console
-$ git clone https://github.com/gongahkia/dc4u
-$ brew install r 
-$ brew install pandoc
-$ brew install --cask rstudio
-$ R
-> install.packages("rmarkdown")
-> install.packages("officedown")
-> install.packages('tinytex')
-> tinytex::install_tinytex()
-> Save workspace image? [y/n/c]: n
-$ exit
+
 ```
 
 ## Architecture
