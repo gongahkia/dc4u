@@ -39,6 +39,30 @@ sub new {
                     charge => _uk_charge(),
                     officer => _uk_officer()
                 }
+            },
+            australia => {
+                charge => {
+                    header => _australia_header(),
+                    suspect => _australia_suspect(),
+                    charge => _australia_charge(),
+                    officer => _australia_officer()
+                }
+            },
+            india => {
+                charge => {
+                    header => _india_header(),
+                    suspect => _india_suspect(),
+                    charge => _india_charge(),
+                    officer => _india_officer()
+                }
+            },
+            malaysia => {
+                charge => {
+                    header => _malaysia_header(),
+                    suspect => _malaysia_suspect(),
+                    charge => _malaysia_charge(),
+                    officer => _malaysia_officer()
+                }
             }
         }
     };
@@ -303,6 +327,126 @@ sub _uk_officer {
     <p>Prosecutor: {{officer_name}}</p>
     <p>{{officer_role}}</p>
     <p>Date: {{officer_date}}</p>
+</div>
+HTML
+}
+
+sub _australia_header {
+    return <<'HTML';
+<div class="header">
+    <h1>Criminal Charge</h1>
+    <h2>CHARGE SHEET</h2>
+    <h2>Commonwealth of Australia</h2>
+</div>
+HTML
+}
+
+sub _australia_suspect {
+    return <<'HTML';
+<div class="suspect-info">
+    <p>Accused:</p>
+    <p><span class="bold">Full Name:</span> {{suspect_name}}</p>
+    <p><span class="bold">Date of Birth:</span> {{suspect_dob}}</p>
+    <p><span class="bold">Address:</span> {{suspect_address}}</p>
+</div>
+HTML
+}
+
+sub _australia_charge {
+    return <<'HTML';
+<div class="charge-section">
+    <p>That on or about {{charge_date}} at {{charge_location}}, the accused did {{charge_description}}, contrary to {{statute}}.</p>
+</div>
+HTML
+}
+
+sub _australia_officer {
+    return <<'HTML';
+<div class="officer-info">
+    <p>Informant: {{officer_name}}</p>
+    <p>{{officer_role}}</p>
+    <p>Date of Charge: {{officer_date}}</p>
+</div>
+HTML
+}
+
+sub _india_header {
+    return <<'HTML';
+<div class="header">
+    <h1>First Information Report</h1>
+    <h2>CHARGE SHEET</h2>
+    <h2>Republic of India</h2>
+</div>
+HTML
+}
+
+sub _india_suspect {
+    return <<'HTML';
+<div class="suspect-info">
+    <p>Accused Person:</p>
+    <p><span class="bold">Name:</span> {{suspect_name}}</p>
+    <p><span class="bold">Date of Birth:</span> {{suspect_dob}}</p>
+    <p><span class="bold">Address:</span> {{suspect_address}}</p>
+</div>
+HTML
+}
+
+sub _india_charge {
+    return <<'HTML';
+<div class="charge-section">
+    <p>That on or about {{charge_date}} at {{charge_location}}, the accused did commit the offence of {{charge_description}}, punishable under {{statute}}.</p>
+</div>
+HTML
+}
+
+sub _india_officer {
+    return <<'HTML';
+<div class="officer-info">
+    <p>Investigating Officer: {{officer_name}}</p>
+    <p>{{officer_role}}</p>
+    <p>Date: {{officer_date}}</p>
+</div>
+HTML
+}
+
+sub _malaysia_header {
+    return <<'HTML';
+<div class="header">
+    <h1>Kanun Prosedur Jenayah</h1>
+    <h2>(Criminal Procedure Code)</h2>
+    <h2>PERTUDUHAN / CHARGE</h2>
+</div>
+HTML
+}
+
+sub _malaysia_suspect {
+    return <<'HTML';
+<div class="suspect-info">
+    <p>Bahawa kamu / You,</p>
+    <p><span class="bold">Nama / Name:</span> {{suspect_name}}</p>
+    <p><span class="bold">No. K/P / NRIC:</span> {{suspect_nric}}</p>
+    <p><span class="bold">Bangsa / Race:</span> {{suspect_race}}</p>
+    <p><span class="bold">Umur / Age:</span> {{suspect_age}}</p>
+    <p><span class="bold">Jantina / Sex:</span> {{suspect_gender}}</p>
+    <p><span class="bold">Kewarganegaraan / Nationality:</span> {{suspect_nationality}}</p>
+</div>
+HTML
+}
+
+sub _malaysia_charge {
+    return <<'HTML';
+<div class="charge-section">
+    <p>adalah dituduh bahawa kamu pada / are charged that you on (or about) {{charge_date}} di / at [tempat / location, add as necessary], Malaysia, telah / did {{charge_explanation}}, dan dengan itu kamu telah melakukan satu kesalahan di bawah / and you have thereby committed an offence under {{statute}}.</p>
+</div>
+HTML
+}
+
+sub _malaysia_officer {
+    return <<'HTML';
+<div class="officer-info">
+    <p>{{officer_name}}</p>
+    <p>{{officer_role}}</p>
+    <p>Tarikh / Date: {{officer_date}}</p>
 </div>
 HTML
 }

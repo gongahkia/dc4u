@@ -12,8 +12,11 @@ DC4U::TUI::JurisdictionSelector - TUI screen for selecting jurisdiction
 =cut
 
 my @JURISDICTIONS = (
-    { key => 'singapore', label => 'Singapore', desc => 'Criminal Procedure Code 2010, Ch. 68' },
-    { key => 'uk',        label => 'United Kingdom', desc => 'Criminal Justice Act 2003, Ch. 44' },
+    { key => 'singapore', label => 'Singapore',      desc => 'Criminal Procedure Code 2010, Ch. 68' },
+    { key => 'uk',        label => 'United Kingdom',  desc => 'Criminal Justice Act 2003, Ch. 44' },
+    { key => 'australia', label => 'Australia',        desc => 'Crimes Act 1900 / Criminal Code Act 1995' },
+    { key => 'india',     label => 'India',            desc => 'Indian Penal Code 1860 / CrPC' },
+    { key => 'malaysia',  label => 'Malaysia',         desc => 'Penal Code (Act 574) / CPC' },
 );
 
 sub new {
