@@ -31,7 +31,6 @@ Build.bat
 test_output/
 *.html
 *.pdf
-*.txt
 *.md
 *.docx
 *.rtf
