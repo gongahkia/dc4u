@@ -44,13 +44,16 @@ sub run {
     while (1) {
         $self->_draw($win);
         my $ch = getch();
+        next unless defined $ch;
         if ($ch eq 'q' || $ch eq 'Q') {
             return undef;
-        } elsif ($ch == KEY_UP || $ch eq 'k') {
+        }
+        my $code = (length($ch) == 1) ? ord($ch) : $ch;
+        if ($code == KEY_UP || $ch eq 'k') {
             $self->{cursor}-- if $self->{cursor} > 0;
-        } elsif ($ch == KEY_DOWN || $ch eq 'j') {
+        } elsif ($code == KEY_DOWN || $ch eq 'j') {
             $self->{cursor}++ if $self->{cursor} < $#FORMATS;
-        } elsif ($ch == 10 || $ch == KEY_ENTER || $ch == 13) {
+        } elsif ($code == 10 || $code == 13 || $code == KEY_ENTER) {
             return $FORMATS[$self->{cursor}]{key};
         }
     }
