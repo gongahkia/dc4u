@@ -50,7 +50,7 @@ A Legal Draft Charge Creator.
 
 ### Eg. Draft Charge created with `DC4U`
 
-<img src="asset/reference/draft-charge-eg.png" width="75%">
+<img src="asset/reference/draft-charge-eg.png" width="60%">
 
 ## Usage
 
@@ -59,18 +59,49 @@ The below instructions are for using `DC4U` on your client machine.
 1. First run the below commands to install `DC4U` locally.
 
 ```console
-$
+$ make v2-install
 ```
 
-2. Next, execute ...
+2. Alternatively, you can use the interactive TUI for a guided experience:
 
 ```console
-$
+$ make tui
+```
+
+3. For command-line usage, specify the input file and desired format:
+
+```console
+$ dc4u -f PDF samples/v2/singapore_assault.dc
 ```
 
 ## Architecture
 
-<img src="./assets/reference/architecture.png">
+```mermaid
+graph TD
+    A[.dc Source File] --> B[Lexer]
+    B -->|Tokens| C[Parser]
+    C -->|Structured Data| D[Generator]
+    D -->|Data| E[Template Engine]
+    E -->|Applied Styles| F[Final Output]
+    
+    subgraph "DC4U Core (v2.0 Perl)"
+        B
+        C
+        D
+        E
+    end
+    
+    F --> G[PDF]
+    F --> H[HTML]
+    F --> I[TXT]
+    F --> J[DOCX]
+    
+    K[Config YAML] --> D
+    K --> E
+    L[Logger] --> B
+    L --> C
+    L --> D
+```
 
 ## Output formats
 
