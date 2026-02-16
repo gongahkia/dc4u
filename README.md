@@ -1,5 +1,6 @@
 [![](https://img.shields.io/badge/DC4U_1.0.0-passing-green)](https://github.com/gongahkia/dc4u/releases/tag/1.0.0)
 [![](https://img.shields.io/badge/DC4U_2.0.0-passing-dark_green)](https://github.com/gongahkia/dc4u/releases/tag/2.0.0)
+![](https://github.com/gongahkia/dc4u/actions/workflows/ci.yml/badge.svg)
 
 # `Draft Charges 4 U`
 
