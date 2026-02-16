@@ -85,6 +85,8 @@ sub run {
         next unless defined $ch;
         if ($ch eq 'q' || $ch eq 'Q') {
             return undef;
+        } elsif ($ch eq 'l' || $ch eq 'L') {
+            return '__VIEW_LOGS__';
         }
         my $code = (length($ch) == 1) ? ord($ch) : $ch;
         if ($code == KEY_UP || $ch eq 'k') {
