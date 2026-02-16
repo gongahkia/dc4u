@@ -42,13 +42,16 @@ sub show {
     while (1) {
         $self->_draw_lines($win, \@lines, $visible);
         my $ch = getch();
+        next unless defined $ch;
         if ($ch eq 'q' || $ch eq 'Q') {
             return undef;
-        } elsif ($ch == KEY_UP || $ch eq 'k') {
+        }
+        my $code = (length($ch) == 1) ? ord($ch) : $ch;
+        if ($code == KEY_UP || $ch eq 'k') {
             $self->{scroll}-- if $self->{scroll} > 0;
-        } elsif ($ch == KEY_DOWN || $ch eq 'j') {
+        } elsif ($code == KEY_DOWN || $ch eq 'j') {
             $self->{scroll}++ if $self->{scroll} + $visible < scalar(@lines);
-        } elsif ($ch == 10 || $ch == KEY_ENTER || $ch == 13) {
+        } elsif ($code == 10 || $code == 13 || $code == KEY_ENTER) {
             return 1;
         }
     }
